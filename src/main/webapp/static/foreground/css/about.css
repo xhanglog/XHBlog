@@ -1,0 +1,9 @@
+.about { overflow: hidden;margin: 0 auto; ;background: url(../img/abbg.png) no-repeat right top #fff; padding: 20px 40px;margin-top: 10px;border-radius: 6px;width: 86%}
+.ab_title { margin: 20px 0; font-size: 18px; font-weight: bold;background: url(../img/hline.png) no-repeat bottom right; width: 120px; clear: both; background-size: 40px; border-bottom: #000 1px dashed; padding-left: 10px; padding-bottom: 5px; display: inline-block; }
+.ab_dubai { margin-bottom: 15px; display: inline-block; }
+.fp{ text-indent: 2em }
+.sp{ text-indent: 7em}
+@media only screen and (max-width: 479px) {
+	.about{width: 100%}
+	.sp{ text-indent: 2em}
+}

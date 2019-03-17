@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xhanglog.dao.ArticalMapper">
+    <resultMap id="BaseResultMap" type="cn.xhanglog.entity.Artical" >
+        <id column="artical_id" property="articalId" jdbcType="INTEGER" />
+        <result column="menu_id" property="menu.menuId" jdbcType="INTEGER" />
+        <result column="sys_user_id" property="user.sysUserId" jdbcType="INTEGER" />
+        <result column="summary" property="summary" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="cover_image" property="coverImage" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+        <result column="is_comment" property="comment" jdbcType="BIT" />
+        <result column="recommended" property="recommended" jdbcType="BIT" />
+        <result column="lookCount" property="lookCount" jdbcType="INTEGER" />
+        <result column="commentCount" property="commentCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="getRecommendedArtical" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select artical_id,title from artical where recommended = 1 and `status` = 1 limit 8;
+    </select>
+    <select id="getClickMostArtical" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select artical_id,title from artical where `status` = 1 order by lookCount desc limit 8;
+    </select>
+    <select id="getCommentMost" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select artical_id,title from artical where `status` = 1 order by commentCount limit 8;
+    </select>
+    <select id="getShowIndexArtical" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select artical_id,title,cover_image,summary,lookCount,commentCount,update_time from artical where `status` = 1 LIMIT 7;
+    </select>
+    <select id="getArticalInfoById" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select * from artical where artical_id = #{id} and `status` = 1;
+    </select>
+    <select id="getPreArtical" resultMap="BaseResultMap">
+        SELECT artical_id,title from artical
+        WHERE #{id} > artical_id AND `status` = 1 ORDER BY artical_id desc LIMIT 1;
+    </select>
+    <select id="getAfterArtical" resultMap="BaseResultMap">
+        SELECT artical_id,title from artical
+        WHERE artical_id > #{id} AND `status` =1  ORDER BY artical_id LIMIT 1;
+    </select>
+    <select id="getArticalListByTagId" resultMap="BaseResultMap" >
+        SELECT
+        a.artical_id,a.commentCount,a.content,a.cover_image,a.create_time,a.is_comment,a.keywords,a.lookCount,a.menu_id,
+        a.`status`,a.summary,a.sys_user_id,a.title,a.update_time
+        from (artical as a RIGHT JOIN (SELECT artical_id from artical_tag WHERE tag_id = #{tagId}) as b
+        ON a.artical_id = b.artical_id) where `status` = 1 LIMIT #{startRow},#{rows};
+    </select>
+    <select id="getArticalCountByTagId" resultType="integer">
+        SELECT COUNT(*)
+        from
+        (SELECT a.artical_id,a.`status`
+        FROM artical as a RIGHT JOIN
+        (SELECT artical_id FROM artical_tag WHERE tag_id = 1) AS b
+        ON a.artical_id = b.artical_id) AS c
+        WHERE c.`status` = 1;
+    </select>
+
+    <select id="getArticalListByMenuId" resultMap="BaseResultMap" >
+       select * from artical where menu_id = #{menuId} and `status` = 1 limit #{startRow},#{rows};
+    </select>
+    <select id="getArticalCountByMenuId" resultType="integer">
+       select count(*) from artical where menu_id = #{menuId} and `status` = 1;
+    </select>
+
+    <select id="getArticalsBySearch" resultMap="BaseResultMap" >
+       select * from artical where (title like "%"#{keyword}"%" or keywords like "%"#{keyword}"%") and `status` = 1 limit #{startRow},#{rows};
+    </select>
+    <select id="getArticalCountBySearch" resultType="integer">
+       select count(*) from artical where (title like "%"#{keyword}"%" or keywords like "%"#{keyword}"%") and `status` = 1;
+    </select>
+
+    <update id="addArticalLookCount" parameterType="integer">
+        update artical set lookCount = lookCount + 1 where artical_id = #{id};
+    </update>
+
+    <update id="addCommentCount" parameterType="integer">
+        update artical set commentCount = commentCount + 1 where artical_id = #{articalID};
+    </update>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.xhanglog.dao.LinkMapper" >
+    <resultMap id="BaseResultMap" type="cn.xhanglog.entity.Link" >
+        <id column="link_id" property="linkId" jdbcType="INTEGER" />
+        <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+        <result column="link_name" property="linkName" jdbcType="VARCHAR" />
+        <result column="link_owner_nickname" property="linkOwnerNickname" jdbcType="VARCHAR" />
+        <result column="link_owner_contact" property="linkOwnerContact" jdbcType="VARCHAR" />
+        <result column="link_description" property="linkDescription" jdbcType="VARCHAR" />
+        <result column="link_status" property="linkStatus" jdbcType="BIT" />
+        <result column="link_create_time" property="linkCreateTime" jdbcType="TIMESTAMP" />
+        <result column="link_update_time" property="linkUpdateTime" jdbcType="TIMESTAMP" />
+        <result column="showIndex" property="showIndex" jdbcType="BIT" />
+    </resultMap>
+    <select id="getShowIndexLinkList" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Link" >
+        select * from link where showIndex = 1;
+    </select>
+</mapper>

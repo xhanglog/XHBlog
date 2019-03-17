@@ -1,0 +1,80 @@
+.mbbox { overflow: hidden; }
+.mbpic { width: 22%; float: left; margin: 0 22px 30px 0; background-color: #f1f1f1; text-align: center; position: relative; background: #FFF; padding: 15px; border: #CCC 1px solid }
+.effect { max-height: 260px; min-height: 260px; overflow: hidden; }
+.mbimg { border-bottom: 5px solid #333; height: 260px; overflow: hidden; width: 100%; transition: 0.4s; display: inline-block; float: none; vertical-align: middle; }
+.mbimg img { max-width: 100%; margin: auto }
+.mbimg { height: 120px;}
+.mbinfo { font-size: 14px; line-height: 22px; padding: 10px; color: #999; text-align: justify; }
+.mbtitle { background-color: #333; float: left; left: 0; bottom: 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; line-height: 40px; height: 40px; width: 100%; transition: 0.4s; position: absolute }
+.mbtitle a { display: inline-block; vertical-align: middle; color: #FFF }
+.effect:hover .mbimg { height: 100px; transition: 0.4s; }
+
+* { margin: 0; padding: 0 }
+body { font: 14px "微软雅黑", Arial, Helvetica, sans-serif; background: #f1f1f1; background-attachment: fixed; color: #555 }
+img { border: 0; display: block }
+ul, li { list-style: none; }
+/*默认链接颜色 */
+a { text-decoration: none; color: #555 }
+article { width: 1100px; padding: 0 50px 50px 60px; background: rgba(255,255,255,0.5); margin: auto; overflow: hidden; }
+
+/*列表页*/
+.litle { padding: 0 0 10px 0; font-size: 18px; border-bottom: #DEDEDE 1px solid; overflow: hidden; color: #333; text-shadow: #fff 1px 1px 2px; }
+.litle span { float: right; font-weight: normal; font-size: 16px; animation: animations2 5s; -moz-animation: animations2 5s;	/* Firefox */ -webkit-animation: animations2 5s;	/* Safari 和 Chrome */ -o-animation: animations2 5s; }
+@-webkit-keyframes animations2 { 0% {
+opacity:0;
+}
+ 40% {
+opacity:.8;
+}
+ 45% {
+opacity:.3;
+}
+ 50% {
+opacity:.8;
+}
+ 55% {
+opacity:.3;
+}
+ 60% {
+opacity:.8;
+}
+ 100% {
+opacity:1;
+}
+}
+
+/* 大于960px，小于1199px */ 
+@media screen and (min-width: 960px) and (max-width: 1199px) {
+article { width: 100%; margin: auto; overflow: hidden }
+article { padding: 20px 0 0 0 }
+}
+ 
+ /* 大于768px，小于959px */ 
+@media screen and (min-width: 768px) and (max-width: 959px) {
+article { width: 100%; margin: auto; overflow: hidden }
+article { padding: 20px 0 0 10px }
+.litle { margin: 6px 0 0 0; padding-left: 20px; }
+.mbpic { padding: 5px; margin: 10px 10px 5px }
+.mbimg { height: 110px; }
+}
+ 
+/* 大于480px，小于767px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+article { width: 100%; margin: auto; overflow: hidden }
+article { padding: 20px 0 0 0 }
+.litle { margin: 6px 0 0 0; padding-left: 20px; }
+.litle span{display: none;}
+.effect { width: 45% }
+.mbpic { padding: 5px; margin: 0 5px 5px }
+.mbimg { height: 110px;}
+}
+/* 小于479px */
+@media only screen and (max-width: 479px) {
+article { width: 100%; margin: auto; overflow: hidden }
+article { padding: 10px 0 0 14px }
+.litle { margin: 0 0 0 0; padding-left: 18px;}
+.litle span{display: none;}
+.effect { width: 45% }
+.mbpic { padding: 3px; margin: 10px 8px 6px 5px }
+.mbimg { height: 110px; }
+}

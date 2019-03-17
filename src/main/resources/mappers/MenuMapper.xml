@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xhanglog.dao.MenuMapper">
+    <resultMap id="BaseResultMap" type="cn.xhanglog.entity.Menu" >
+        <id column="menu_id" property="menuId" jdbcType="INTEGER" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+        <result column="menu_sort" property="menuSort" jdbcType="INTEGER" />
+        <result column="available" property="available" jdbcType="BIT" />
+        <result column="look_view" property="lookView" jdbcType="INTEGER" />
+        <result column="menu_description" property="menuDescription" jdbcType="VARCHAR" />
+        <result column="menu_create_time" property="menuCreateTime" jdbcType="TIMESTAMP" />
+        <result column="menu_update_time" property="menuUpdateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="getAllMenu" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Menu" >
+        select * from menu where available = 1 order by menu_sort;
+    </select>
+    <select id="getMenuByName" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Menu" >
+        select * from menu where menu_name = #{menuName};
+    </select>
+</mapper>

@@ -1,0 +1,97 @@
+    .place { 
+      line-height: 38px; padding-left:10px; margin-bottom: 10px 
+    }
+    .place a{
+      color: #3e3838;
+    }
+    .bloginfo ul { padding-left: 0px}
+    .bloginfo li { float: left; margin-right: 20px;list-style: none;}
+    .news_title{margin-left: 15px;}
+    p{
+      text-indent:2em;
+      font: 15px "Microsoft YaHei", Arial, Helvetica, sans-serif; 
+      color: #555; line-height: 1.8;
+    }
+    a:hover{
+      text-decoration:none;
+    }
+    .bloginfo{ height:26px;}
+    .next_info{background-color: #ffffff;height: 58px;margin-top: 15px;border-radius:6px;}
+    .prevnew{border-radius: 6px 0 0 6px;text-align: center;padding-top: 18px;border-right: solid 1px #d8cece;}
+    .nextnew{border-radius: 0 6px 6px 0;padding-top: 18px;text-align: center;}
+    .prevnew:hover,.nextnew:hover{
+      -webkit-box-shadow: #ccc 0px 0px 10px;
+      -moz-box-shadow: #ccc 0px 0px 10px;
+      box-shadow: #ccc 0px 0px 10px;  
+    }
+
+    @media screen and (max-width: 960px){
+      .bloginfo{height:42px;}
+      .next_info{height: 120px;margin-bottom: 12px;}
+      .prevnew{border-right:none;border-bottom:solid 1px #d8cece;border-radius: 6px;}
+      .nextnew{border-radius:16px;}
+    }
+
+    /* 评论框 */
+    .comment{background-color: #ffffff;margin-top: 15px;border-radius: 6px;}
+   .mytextarea {
+   width: 100%;
+   overflow: auto;
+   word-break: break-all;
+   height: 100px;
+   color: #000;
+   font-size: 1em;
+   resize: none;
+   }
+   .comment-list{
+
+     margin: 20px auto;
+     clear: both;
+     padding-top: 20px;
+   }
+   .comment-list .comment-info{
+     position: relative;
+     margin-bottom: 20px;
+     margin-right: 20px;
+     border-bottom: 1px solid #ccc;
+   }
+   .comment-list .comment-info header{
+ width: 10%;
+ position: absolute;
+   }
+   .comment-list .comment-info header img{
+     width: 100%;
+     border-radius: 50%;
+     padding: 5px;
+   }
+   .comment-list .comment-info .comment-right{
+ padding:5px 0px 5px 11%; 
+   }
+   .comment-list .comment-info .comment-right h3{
+ margin: 5px 0px;
+   }
+   .comment-list .comment-info .comment-right .comment-content-header{
+ height: 25px;
+   }
+   .comment-list .comment-info .comment-right .comment-content-header span,.comment-list .comment-info .comment-right .comment-content-footer span{
+ padding-right: 2em;
+ color: #aaa;
+   }
+   .comment-list .comment-info .comment-right .comment-content-header span,.comment-list .comment-info .comment-right .comment-content-footer span.reply-btn,.send,.reply-list-btn{
+ cursor: pointer;
+   }
+   .comment-list .comment-info .comment-right .reply-list {
+ border-left: 3px solid #ccc;
+ padding-left: 7px;
+   }
+   .comment-list .comment-info .comment-right .reply-list .reply{
+ border-bottom: 1px dashed #ccc;
+   }
+   .comment-list .comment-info .comment-right .reply-list .reply div span{
+ padding-left: 10px;
+   }
+   .comment-list .comment-info .comment-right .reply-list .reply p span{
+ padding-right: 2em;
+ color: #aaa;
+   }
+}
