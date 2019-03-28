@@ -118,8 +118,10 @@
                 <button type="button" class="layui-btn" id="test1">上传图片</button>
                 <div class="layui-upload-list">
                 <img class="layui-upload-img" id="demo1" style="heght:90px;width:90px;margin-left:110px"/>
-                <div style="margin-left:110px""><p id="demoText"></p></div>
+                <div style="margin-left:110px"">
+                <p id="demoText"></p></div>
                 </div>
+            <input type="text" display="none" id="coverPic"/>
                 </div>
                     </div>
 
@@ -150,16 +152,20 @@
                             var uploadInst = upload.render({
                                 elem: '#test1'
                                 , url: '/uploadPic'
-                                , before: function (obj) {
+                                /*, before: function (obj) {
                                     //预读本地文件示例，不支持ie8
                                     obj.preview(function (index, file, result) {
                                         $('#demo1').attr('src', result); //图片链接（base64）
                                     });
-                                }
+                                }*/
                                 , done: function (res) {
                                     //如果上传失败
+                                    alert(res.code+":"+res.picurl);
                                     if (res.code > 0) {
                                         return layer.msg('上传失败');
+                                    }else{
+                                        $('#demo1').attr('src', res.picurl);
+                                        $('#coverPic').val(res.picurl);
                                     }
                                     //上传成功
                                 }

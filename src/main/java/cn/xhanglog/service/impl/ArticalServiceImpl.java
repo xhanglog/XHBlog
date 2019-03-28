@@ -1,12 +1,11 @@
 package cn.xhanglog.service.impl;
 
 import cn.xhanglog.dao.ArticalMapper;
-import cn.xhanglog.dao.CommentMapper;
 import cn.xhanglog.entity.Artical;
-import cn.xhanglog.entity.Link;
 import cn.xhanglog.service.ArticalService;
 import cn.xhanglog.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +21,21 @@ public class ArticalServiceImpl implements ArticalService {
     private ArticalMapper articalMapper;
 
     @Override
+    @Cacheable(value = "artical" , key="0")
     public List<Artical> getRecommendedArtical() {
         List<Artical> recommendedArtical = articalMapper.getRecommendedArtical();
         return recommendedArtical;
     }
 
     @Override
+    @Cacheable(value = "artical", key="1")
     public List<Artical> getClickMostArtical() {
         List<Artical> clickMostArtical = articalMapper.getClickMostArtical();
         return clickMostArtical;
     }
 
     @Override
+    @Cacheable(value = "artical", key="2")
     public List<Artical> getCommentMost() {
         return articalMapper.getCommentMost();
     }

@@ -4,6 +4,7 @@ import cn.xhanglog.dao.TagMapper;
 import cn.xhanglog.entity.Tag;
 import cn.xhanglog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class TagServiceImpl implements TagService {
     private TagMapper tagMapper;
 
     @Override
+    @Cacheable(value = "tag")
     public List<Tag> getTagList() {
         List<Tag> tagList = tagMapper.getTagList();
         return tagList;

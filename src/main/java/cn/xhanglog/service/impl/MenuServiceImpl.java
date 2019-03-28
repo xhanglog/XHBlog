@@ -4,6 +4,7 @@ import cn.xhanglog.dao.MenuMapper;
 import cn.xhanglog.entity.Menu;
 import cn.xhanglog.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
     @Override
+    @Cacheable(value = "menu")
     public List<Menu> getAllMenu() {
         List<Menu> menuList = menuMapper.getAllMenu();
         return menuList;

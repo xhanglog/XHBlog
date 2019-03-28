@@ -36,22 +36,22 @@ public class QiniuController {
     @RequestMapping("/uploadPic")
     @ResponseBody
     public Map<String, Object> uplodaQiniu(MultipartFile file, HttpServletRequest request){
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
         try {
             byte[] bytes = file.getBytes();
             String imageName = "coverPic"+UUID.randomUUID().toString().replace("-","");
             try {
                 //使用base64方式上传到七牛云
-                String url = cn.xhanglog.controller.QiniuController.put64image(bytes, imageName);
-                result.put("url",url);
-                result.put("code",0);
+                String picurl = cn.xhanglog.controller.QiniuController.put64image(bytes, imageName);
+                res.put("picurl",picurl);
+                res.put("code",0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return result;
+            return res;
         } catch (IOException e) {
-            result.put("code",1);
-            return result;
+            res.put("code",1);
+            return res;
         }
     }
 

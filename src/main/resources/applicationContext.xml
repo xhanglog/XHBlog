@@ -4,14 +4,18 @@
 	   xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:cache="http://www.springframework.org/schema/cache"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+		http://www.springframework.org/schema/cache
+    	http://www.springframework.org/schema/cache/spring-cache-3.1.xsd ">
 
 	<!--包扫描 -->
 	<context:component-scan base-package="cn.xhanglog" />
+
 	<!-- 加载配置文件 -->
 	<context:property-placeholder location="classpath:db.properties" />
 	<context:property-placeholder location="classpath:qqconnectconfig.properties" />
@@ -35,16 +39,29 @@
 		<property name="mapperLocations" value="classpath:mappers/*.xml"></property>
 	</bean>
 
+	<!-- 开启注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- 应用spring cache注解功能  -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+
 	<!-- 注解事务 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
-	<!-- 开启注解 -->
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 配置ehcache管理器-->
+
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"></property>
+	</bean>
+
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml"></property>
 	</bean>
 
 	<!--将mybatis的mapper映射成springbean -->
