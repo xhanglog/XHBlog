@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,23 +47,9 @@
 </head>
 <body>
     <div id="taglist">
-                <a onclick="InsertTag('java')" href="#">java</a>
-                <a onclick="InsertTag('正则表达式')" href="#">正则表达式</a>
-                <a onclick="InsertTag('css')" href="#">css</a>
-                <a onclick="InsertTag('dao')" href="#">dao</a>
-                <a onclick="InsertTag('jquery')" href="#">jquery</a>
-                <a onclick="InsertTag('js')" href="#">js</a>
-                <a onclick="InsertTag('ssh')" href="#">ssh</a>
-                <a onclick="InsertTag('web')" href="#">web</a>
-                <a onclick="InsertTag('冲突')" href="#">冲突</a>
-                <a onclick="InsertTag('二次探测法')" href="#">二次探测法</a>
-                <a onclick="InsertTag('哈希表')" href="#">哈希表</a>
-                <a onclick="InsertTag('框架')" href="#">框架</a>
-                <a onclick="InsertTag('平方探测法')" href="#">平方探测法</a>
-                <a onclick="InsertTag('散列函数')" href="#">散列函数</a>
-                <a onclick="InsertTag('时间同步')" href="#">时间同步</a>
-                <a onclick="InsertTag('数据结构')" href="#">数据结构</a>
-                <a onclick="InsertTag('图片轮播')" href="#">图片轮播</a>
+        <c:forEach items="${tags}" var="tag">
+            <a onclick="InsertTag('${tag.tagName}')" href="#">${tag.tagName}</a>
+        </c:forEach>
     </div>
 </body>
 

@@ -8,17 +8,17 @@
             maxElementsInMemory="10000"
             eternal="false"
             overflowToDisk="true"
-            timeToIdleSeconds="120"
-            timeToLiveSeconds="120"
+            timeToIdleSeconds="900"
+            timeToLiveSeconds="900"
             diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120" />
+            diskExpiryThreadIntervalSeconds="900" />
 
     <cache name="menu"
            maxElementsInMemory="10000"
            maxElementsOnDisk="100000"
            eternal="false"
-           timeToIdleSeconds="120"
-           timeToLiveSeconds="120"
+           timeToIdleSeconds="900"
+           timeToLiveSeconds="900"
            overflowToDisk="true"
            diskPersistent="false" />
 
@@ -26,8 +26,8 @@
            maxElementsInMemory="10000"
            maxElementsOnDisk="100000"
            eternal="false"
-           timeToIdleSeconds="120"
-           timeToLiveSeconds="120"
+           timeToIdleSeconds="900"
+           timeToLiveSeconds="900"
            overflowToDisk="true"
            diskPersistent="false" />
 
@@ -35,8 +35,8 @@
            maxElementsInMemory="10000"
            maxElementsOnDisk="100000"
            eternal="false"
-           timeToIdleSeconds="120"
-           timeToLiveSeconds="120"
+           timeToIdleSeconds="900"
+           timeToLiveSeconds="900"
            overflowToDisk="true"
            diskPersistent="false" />
 
@@ -44,8 +44,8 @@
            maxElementsInMemory="10000"
            maxElementsOnDisk="100000"
            eternal="false"
-           timeToIdleSeconds="120"
-           timeToLiveSeconds="120"
+           timeToIdleSeconds="900"
+           timeToLiveSeconds="900"
            overflowToDisk="true"
            diskPersistent="false" />
 

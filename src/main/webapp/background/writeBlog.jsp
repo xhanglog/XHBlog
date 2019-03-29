@@ -113,16 +113,17 @@
 
                     <div class="layui-form-item">
                     <label class="layui-form-label">封面图片：</label>
-
-            <div class="layui-upload">
-                <button type="button" class="layui-btn" id="test1">上传图片</button>
-                <div class="layui-upload-list">
-                <img class="layui-upload-img" id="demo1" style="heght:90px;width:90px;margin-left:110px"/>
-                <div style="margin-left:110px"">
-                <p id="demoText"></p></div>
-                </div>
-            <input type="text" display="none" id="coverPic"/>
-                </div>
+                    <div class="layui-upload">
+                        <button type="button" class="layui-btn" id="test1">上传图片</button>
+                        <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="demo1" style="heght:90px;width:90px;margin-left:110px"/>
+                        <div style="margin-left:110px">
+                        <p id="demoText"></p></div>
+                        </div>
+                        <div class="layui-input-block">
+                        <input type="text" id="coverPic" name="coverPic" lay-verify="required" placeholder="请输入图片地址" autocomplete="off" class="layui-input" style="width: 60%">
+                        </div>
+                    </div>
                     </div>
 
                     <div class="layui-form-item">
@@ -131,7 +132,7 @@
                     <input type="text" name="tags" id="tags" autocomplete="off" placeholder="请输入标签，多个标签用逗号隔开" class="layui-input" style="width: 60%">
                     <a onclick=" leftVal = (screen.width) / 2;
                     topVal = (screen.height - 530) / 2;
-                    window.open('tags.jsp','_blank','width=300,height=480,toolbars=yes,resizable=yes,scrollbars=yes,left='+leftVal+',top='+topVal);return false;" href="javascript:void(0);">插入已有标签</a>
+                    window.open('${pageContext.request.contextPath}/getAlltag','_blank','width=300,height=480,toolbars=yes,resizable=yes,scrollbars=yes,left='+leftVal+',top='+topVal);return false;" href="javascript:void(0);">插入已有标签</a>
                     </div>
                     </div>
 
@@ -152,15 +153,8 @@
                             var uploadInst = upload.render({
                                 elem: '#test1'
                                 , url: '/uploadPic'
-                                /*, before: function (obj) {
-                                    //预读本地文件示例，不支持ie8
-                                    obj.preview(function (index, file, result) {
-                                        $('#demo1').attr('src', result); //图片链接（base64）
-                                    });
-                                }*/
                                 , done: function (res) {
                                     //如果上传失败
-                                    alert(res.code+":"+res.picurl);
                                     if (res.code > 0) {
                                         return layer.msg('上传失败');
                                     }else{
