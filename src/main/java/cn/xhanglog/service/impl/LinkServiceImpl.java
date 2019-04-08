@@ -24,4 +24,9 @@ public class LinkServiceImpl implements LinkService {
     public List<Link> getShowIndexLinkList() {
         return linkMapper.getShowIndexLinkList();
     }
+
+    @Override
+    public Integer getLinkCount() {
+        return linkMapper.getLinkCount();
+    }
 }

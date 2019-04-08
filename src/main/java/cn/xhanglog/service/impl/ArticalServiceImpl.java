@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,6 +116,57 @@ public class ArticalServiceImpl implements ArticalService {
     @Override
     public void addCommentCount(Integer articalID) {
         articalMapper.addCommentCount(articalID);
+    }
+
+    @Override
+    public Integer getAriticalCount() {
+        return articalMapper.getAriticalCount();
+    }
+
+    @Override
+    public Integer getCommentCount() {
+        return articalMapper.getCommentCount();
+    }
+
+    @Override
+    public Integer getLookCount() {
+        return articalMapper.getLookCount();
+    }
+
+    @Override
+    public Integer addArtical(Artical artical) {
+        return articalMapper.addArtical(artical);
+    }
+
+    @Override
+    public List<Artical> getArticals(Integer page, Integer size, Date start, Date end, String title) {
+        Integer startRow = (page-1) * size;
+        return articalMapper.getArticals(startRow,size,start,end,title);
+    }
+
+    @Override
+    public Integer getAriticalCountByCriteria(Date start, Date end, String title) {
+        return articalMapper.getAriticalCountByCriteria(start,end,title);
+    }
+
+    @Override
+    public Artical getArticalById(Integer parseInt) {
+        return articalMapper.getArticalById(parseInt);
+    }
+
+    @Override
+    public Integer editArtical(Artical artical) {
+        return articalMapper.editArtical(artical);
+    }
+
+    @Override
+    public Integer delArticalById(Integer id) {
+        return articalMapper.delArticalById(id);
+    }
+
+    @Override
+    public Integer editSwitch(Integer articalId, Boolean val, String name) {
+        return articalMapper.editSwitch(articalId,val,name);
     }
 
 }

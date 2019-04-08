@@ -24,10 +24,10 @@
     <h1>layuiCMS-管理登录</h1>
     <form class="layui-form">
         <div class="layui-form-item">
-            <input class="layui-input" name="username" placeholder="用户名" lay-verify="required" type="text" autocomplete="off">
+            <input class="layui-input" name="sysUserName" placeholder="用户名" lay-verify="required" type="text" autocomplete="off">
         </div>
         <div class="layui-form-item">
-            <input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
+            <input class="layui-input" name="sysUserPassword" placeholder="密码" lay-verify="required" type="password" autocomplete="off">
         </div>
         <div class="layui-form-item form_code">
             <input class="layui-input" name="code" placeholder="验证码"  type="text" autocomplete="off">
@@ -37,6 +37,33 @@
     </form>
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/background/lib/layui/layui.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/background/js/login.js"></script>>
+<script type="text/javascript">
+    layui.use(['upload','layer','form'], function() {
+        var $ = layui.jquery
+            , upload = layui.upload
+            ,form = layui.form
+            ,layer = layui.layer;
+        /**
+         * 通用表单提交(AJAX方式)
+         */
+        form.on('submit(login)', function(data) {
+            var param=data.field;
+            $.post({
+                url: '${pageContext.request.contextPath}/user/login',
+                dataType:'json',
+                contentType: "application/json; charset=utf-8",
+                data:JSON.stringify(param),
+                success: function(res) {
+                    if(res.code == 0) {
+                        window.location.href = "/background/index.jsp";
+                    }else{
+                        layer.alert(res.msg,{icon: 5});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
 </body>
 </html>

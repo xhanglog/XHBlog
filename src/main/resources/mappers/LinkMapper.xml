@@ -17,4 +17,8 @@
     <select id="getShowIndexLinkList" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Link" >
         select * from link where showIndex = 1;
     </select>
+
+    <select id="getLinkCount" resultType="integer">
+       select count(*) from link;
+    </select>
 </mapper>

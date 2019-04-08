@@ -14,7 +14,12 @@
 <body>
 <div class="x-body layui-anim layui-anim-up">
     <blockquote class="layui-elem-quote">欢迎管理员：
-        <span class="x-red">test</span>！当前时间:2018-04-25 20:50:53</blockquote>
+        <span class="x-red">${user.sysUserName}</span>！当前时间:
+        <span id="datetime"></span>
+        <script>
+            setInterval("document.getElementById('datetime').innerHTML=new Date().toLocaleString();", 1000);
+        </script>
+    </blockquote>
     <fieldset class="layui-elem-field">
         <legend>数据统计</legend>
         <div class="layui-field-box">
@@ -23,8 +28,8 @@
                     <div class="layui-card-body">
                         <div class="layui-carousel x-admin-carousel x-admin-backlog" lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 90px;">
                             <div carousel-item="">
-                                <ul class="layui-row layui-col-space10 layui-this">
-                                    <li class="layui-col-xs2">
+                                <ul class="layui-row layui-col-space10 layui-this" id="info">
+                                    <%--<li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body">
                                             <h3>文章数</h3>
                                             <p>
@@ -47,25 +52,18 @@
                                     </li>
                                     <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>商品数</h3>
+                                            <h3>访问数</h3>
                                             <p>
                                                 <cite>67</cite></p>
                                         </a>
                                     </li>
                                     <li class="layui-col-xs2">
                                         <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>文章数</h3>
+                                            <h3>友链数</h3>
                                             <p>
                                                 <cite>67</cite></p>
                                         </a>
-                                    </li>
-                                    <li class="layui-col-xs2">
-                                        <a href="javascript:;" class="x-admin-backlog-body">
-                                            <h3>文章数</h3>
-                                            <p>
-                                                <cite>6766</cite></p>
-                                        </a>
-                                    </li>
+                                    </li>--%>
                                 </ul>
                             </div>
                         </div>
@@ -81,12 +79,7 @@
                 <tbody>
                 <tr>
                     <td >
-                        <a class="x-a" href="/" target="_blank">新版x-admin 2.0上线了</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td >
-                        <a class="x-a" href="/" target="_blank">交流qq群:(519492808)</a>
+                        <a class="x-a" href="#" target="_blank">贰月小巷-管理后台</a>
                     </td>
                 </tr>
                 </tbody>
@@ -97,40 +90,25 @@
         <legend>系统信息</legend>
         <div class="layui-field-box">
             <table class="layui-table">
-                <tbody>
+                <tbody >
                 <tr>
-                    <th>xxx版本</th>
-                    <td>1.0.180420</td></tr>
+                    <th>博客版本</th>
+                    <td>1.0</td></tr>
                 <tr>
-                    <th>服务器地址</th>
-                    <td>x.xuebingsi.com</td></tr>
+                    <th>域名</th>
+                    <td>www.xhanglog.cn</td></tr>
                 <tr>
                     <th>操作系统</th>
-                    <td>WINNT</td></tr>
+                    <td>Linux(CentOS)</td></tr>
                 <tr>
                     <th>运行环境</th>
-                    <td>Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9</td></tr>
+                    <td>Tomcat 8.0 </td></tr>
                 <tr>
-                    <th>PHP版本</th>
-                    <td>5.6.27</td></tr>
-                <tr>
-                    <th>PHP运行方式</th>
-                    <td>cgi-fcgi</td></tr>
+                    <th>JDK版本</th>
+                    <td>1.8</td></tr>
                 <tr>
                     <th>MYSQL版本</th>
-                    <td>5.5.53</td></tr>
-                <tr>
-                    <th>ThinkPHP</th>
-                    <td>5.0.18</td></tr>
-                <tr>
-                    <th>上传附件限制</th>
-                    <td>2M</td></tr>
-                <tr>
-                    <th>执行时间限制</th>
-                    <td>30s</td></tr>
-                <tr>
-                    <th>剩余空间</th>
-                    <td>86015.2M</td></tr>
+                    <td>5.6</td></tr>
                 </tbody>
             </table>
         </div>
@@ -142,25 +120,43 @@
                 <tbody>
                 <tr>
                     <th>版权所有</th>
-                    <td>xuebingsi(xuebingsi)
-                        <a href="http://x.xuebingsi.com/" class='x-a' target="_blank">访问官网</a></td>
+                    <td>贰月小巷
+                        <a href="http://www.xhanglog.cn" class='x-a' target="_blank">访问主页</a></td>
                 </tr>
                 <tr>
                     <th>开发者</th>
-                    <td>马志斌(113664000@qq.com)</td></tr>
+                    <td>贰月小巷(blogxiaohang@163.com)</td></tr>
                 </tbody>
             </table>
         </div>
     </fieldset>
 </div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    var _hmt = _hmt || [];
+    /*var _hmt = _hmt || [];
     (function() {
         var hm = document.createElement("script");
         hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
-    })();
+    })();*/
+
+    $(function() {
+        $.post({
+            url: "${pageContext.request.contextPath}/admin/initHome",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: "",
+            success: function (data) {
+                $("#info").empty();
+                for (var i = 0; i < data.length; i++) {
+                    $("#info").append('<li class="layui-col-xs2"><a href="javascript:;" class="x-admin-backlog-body"><h3>'
+                    +data[i].name+'</h3><p><cite>'+data[i].count+'</cite></p> </a></li>');
+                }
+            }
+        });
+    });
 </script>
+
 </body>
 </html>

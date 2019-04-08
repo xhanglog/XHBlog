@@ -6,9 +6,10 @@
     <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
     <resultMap id="BaseResultMap" type="cn.xhanglog.entity.Artical" >
         <id column="artical_id" property="articalId" jdbcType="INTEGER" />
-        <result column="menu_id" property="menu.menuId" jdbcType="INTEGER" />
+        <result column="menu_id" property="menuId" jdbcType="INTEGER" />
         <result column="sys_user_id" property="user.sysUserId" jdbcType="INTEGER" />
         <result column="summary" property="summary" jdbcType="VARCHAR" />
+        <result column="content" property="editorValue" jdbcType="VARCHAR" />
         <result column="title" property="title" jdbcType="VARCHAR" />
         <result column="cover_image" property="coverImage" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="BIT" />
@@ -34,6 +35,9 @@
     </select>
     <select id="getArticalInfoById" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
         select * from artical where artical_id = #{id} and `status` = 1;
+    </select>
+    <select id="getArticalById" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Artical" >
+        select * from artical where artical_id = #{id};
     </select>
     <select id="getPreArtical" resultMap="BaseResultMap">
         SELECT artical_id,title from artical
@@ -80,5 +84,69 @@
 
     <update id="addCommentCount" parameterType="integer">
         update artical set commentCount = commentCount + 1 where artical_id = #{articalID};
+    </update>
+
+    <select id="getAriticalCount" resultType="integer">
+       select count(*) from artical;
+    </select>
+
+    <select id="getCommentCount" resultType="integer">
+       select sum(commentCount) from artical ;
+    </select>
+
+    <select id="getLookCount" resultType="integer">
+       select sum(lookCount) from artical;
+    </select>
+
+    <insert id="addArtical" parameterType="cn.xhanglog.entity.Artical">
+        insert  into artical set
+        menu_id = #{menuId},sys_user_id = #{user.sysUserId},summary = #{summary},content = #{editorValue},
+        title = #{title},cover_image = #{coverImage},status = #{status},keywords = #{keywords},is_comment = #{comment},
+        recommended = #{recommended},lookCount = #{lookCount},commentCount = #{commentCount},
+        create_time = #{createTime},update_time = #{updateTime};
+    </insert>
+
+    <select id="getArticals" resultMap="BaseResultMap">
+        select * from artical
+        <where>
+            <if test="title != ''">
+                title like "%"#{title}"%"
+            </if>
+            <if test="start != null and end != null ">
+                and create_time between #{start} and #{end}
+            </if>
+        </where>
+        limit #{startRow},#{size};
+    </select>
+
+    <select id="getAriticalCountByCriteria" resultType="integer" >
+        select  count(*) from artical
+        <where>
+            <if test="title != ''">
+               title like "%"#{title}"%"
+            </if>
+            <if test="start != null and end != null">
+               and create_time between #{start} and #{end}
+            </if>
+        </where>
+    </select>
+
+    <update id="editArtical" parameterType="cn.xhanglog.entity.Artical" >
+        update artical set
+        menu_id = #{menuId},sys_user_id = #{user.sysUserId},summary = #{summary},content = #{editorValue},
+        title = #{title},cover_image = #{coverImage},status = #{status},keywords = #{keywords},is_comment = #{comment},
+        recommended = #{recommended},lookCount = #{lookCount},commentCount = #{commentCount},
+        create_time = #{createTime},update_time = #{updateTime}
+        where artical_id = #{articalId};
+    </update>
+
+    <delete id="delArticalById" parameterType="integer">
+        delete from artical where artical_id = #{id};
+    </delete>
+    
+    <update id="editSwitch" statementType="STATEMENT">
+        update artical set
+          ${name} = ${val}
+        where artical_id = ${articalId}
     </update>
 </mapper>

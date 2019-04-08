@@ -3,6 +3,7 @@ package cn.xhanglog.service;
 import cn.xhanglog.entity.Artical;
 import cn.xhanglog.util.Page;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,5 +89,46 @@ public interface ArticalService {
      */
     void addArticalLookCount(Integer id);
 
+    /**
+     * 评论数加1
+     * @param articalID
+     */
     void addCommentCount(Integer articalID);
+
+    /**
+     * 获取所有的文章数目
+     * @return
+     */
+    Integer getAriticalCount();
+
+    /**
+     * 获取评论总数
+     * @return
+     */
+    Integer getCommentCount();
+
+    /**
+     * 获取浏览总数
+     * @return
+     */
+    Integer getLookCount();
+
+    /**
+     * 添加文章
+     * @param artical
+     * @return
+     */
+    Integer addArtical(Artical artical);
+
+    List<Artical> getArticals(Integer page, Integer size, Date start, Date end, String title);
+
+    Integer getAriticalCountByCriteria(Date start, Date end, String title);
+
+    Artical getArticalById(Integer parseInt);
+
+    Integer editArtical(Artical artical);
+
+    Integer delArticalById(Integer id);
+
+    Integer editSwitch(Integer articalId, Boolean val, String name);
 }

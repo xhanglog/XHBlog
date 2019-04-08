@@ -6,17 +6,60 @@
         <result column="member_nickname" property="memberNickname" jdbcType="VARCHAR" />
         <result column="member_image" property="memberImage" jdbcType="VARCHAR" />
         <result column="sex" property="sex" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="is_comment" property="comment" jdbcType="BIT" />
     </resultMap>
+
     <select id="getAllMembers" resultMap="BaseResultMap">
         select member_id,member_nickname,member_image,sex,is_comment from member;
     </select>
+
     <select id="getMemberById" resultMap="BaseResultMap">
         select member_id,member_nickname,member_image from member where member_id = #{openID};
     </select>
+
     <insert id="addMember">
         insert into member
         set
-        member_id = #{memberId},member_nickname = #{memberNickname},member_image = #{memberImage},sex = #{sex},is_comment = #{comment};
+        member_id = #{memberId},member_nickname = #{memberNickname},member_image = #{memberImage},
+        sex = #{sex},is_comment = #{comment},create_time = #{createTime};
     </insert>
+
+    <select id="getMemberCount" resultType="integer">
+        select count(*) from member;
+    </select>
+
+    <select id="getMembers" resultMap="BaseResultMap">
+        select * from member
+        <where>
+            <if test="name != ''">
+                member_nickname like "%"#{name}"%"
+            </if>
+            <if test="start != null and end != null ">
+                and create_time between #{start} and #{end}
+            </if>
+        </where>
+        limit #{startRow},#{size};
+    </select>
+
+    <select id="getMemberCountByCriteria" resultType="integer" >
+        select  count(*) from member
+        <where>
+            <if test="name != ''">
+                member_nickname like "%"#{name}"%"
+            </if>
+            <if test="start != null and end != null">
+                and create_time between #{start} and #{end};
+            </if>
+        </where>
+    </select>
+
+    <update id="editSwitch" >
+        update member set is_comment = #{val} where member_id = #{memberId};
+    </update>
+
+    <delete id="delMemberId" parameterType="string">
+      delete from member where member_id = #{memberId};
+    </delete>
+
 </mapper>

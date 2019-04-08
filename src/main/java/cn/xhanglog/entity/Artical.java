@@ -11,8 +11,8 @@ public class Artical implements Serializable {
     private Integer articalId;//编号
     private String title;//标题
     private String coverImage;//封面图片
-    private String summary;//内容
-    private String content;//内容
+    private String summary;//摘要
+    private String editorValue;//内容
     private String keywords;//关键字  以逗号隔开
     private Boolean status;// 文章状态，1为显示
     private Boolean comment;//是否允许评论
@@ -21,17 +21,12 @@ public class Artical implements Serializable {
     private Integer commentCount;//查看次数
     private Date createTime;//发布时间
     private Date updateTime;//更新时间
+    private Integer menuId;
 
     private Menu menu;//文章所属菜单
     private SysUser user;//文章所有者
 
-    public Integer getId() {
-        return articalId;
-    }
-
-    public void setId(Integer articalId) {
-        this.articalId = articalId;
-    }
+    private String condition;//附加条件
 
     public String getTitle() {
         return title;
@@ -47,14 +42,6 @@ public class Artical implements Serializable {
 
     public void setCoverImage(String coverImage) {
         this.coverImage = coverImage;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getKeywords() {
@@ -143,5 +130,37 @@ public class Artical implements Serializable {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Integer getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Integer menuId) {
+        this.menuId = menuId;
+    }
+
+    public String getEditorValue() {
+        return editorValue;
+    }
+
+    public void setEditorValue(String editorValue) {
+        this.editorValue = editorValue;
+    }
+
+    public Integer getArticalId() {
+        return articalId;
+    }
+
+    public void setArticalId(Integer articalId) {
+        this.articalId = articalId;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 }

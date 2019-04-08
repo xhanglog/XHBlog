@@ -34,7 +34,7 @@
             <c:forEach items="${page.rows}" var="artical">
                 <div class="mbpic effect" data-scroll-reveal="enter from the bottom">
                     <div class="mbimg"> <img src="${artical.coverImage}" > </div>
-                    <div class="mbtitle"> <a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a> </div>
+                    <div class="mbtitle"> <a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a> </div>
                     <p class="mbinfo">${artical.summary}</p>
                 </div>
             </c:forEach>

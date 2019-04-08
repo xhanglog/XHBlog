@@ -30,8 +30,8 @@
                     <%--有封面图片--%>
                     <c:if test="${artical.coverImage != null}">
                         <div class="blogs" style="border: solid #FFFFFF 1px;border-radius:6px;">
-                            <h3 class="blogtitle"><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a></h3>
-                            <span class="blogpic"><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html" title=""><img src="${artical.coverImage}" alt=""></a></span>
+                            <h3 class="blogtitle"><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a></h3>
+                            <span class="blogpic"><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html" title=""><img src="${artical.coverImage}" alt=""></a></span>
                             <p class="blogtext">${artical.summary}</p>
                             <div class="bloginfo">
                                 <ul>
@@ -45,7 +45,7 @@
                     <!-- 没有封面图片显示 -->
                     <c:if test="${artical.coverImage == null}">
                         <div class="blogs" style="border: solid #FFFFFF 1px;border-radius:6px;">
-                            <h3 class="blogtitle"><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a></h3>
+                            <h3 class="blogtitle"><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a></h3>
                             <p class="blogtext">${artical.summary}</p>
                             <div class="bloginfo">
                                 <ul>

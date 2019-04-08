@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,5 +31,41 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag getTagByName(String tagName) {
         return tagMapper.getTagByName(tagName);
+    }
+
+    @Override
+    public Integer getTagCount() {
+        return tagMapper.getTagCount();
+    }
+
+    @Override
+    public List<Tag> getTags(Integer page, Integer size, Date start, Date end, String tagName) {
+        Integer startRow = (page-1) * size;
+        return tagMapper.getTags(startRow,size,start,end,tagName);
+    }
+
+    @Override
+    public Integer getTagCountByCriteria(Date start, Date end, String tagName) {
+        return tagMapper.getTagCountByCriteria(start,end,tagName);
+    }
+
+    @Override
+    public Tag getTagById(Integer tagId) {
+        return tagMapper.getTagById(tagId);
+    }
+
+    @Override
+    public Integer delTagById(Integer tagId) {
+        return tagMapper.delTagById(tagId);
+    }
+
+    @Override
+    public Integer editTagById(Tag tag) {
+        return tagMapper.editTagById(tag);
+    }
+
+    @Override
+    public Integer addTag(Tag tag) {
+        return tagMapper.addTag(tag);
     }
 }

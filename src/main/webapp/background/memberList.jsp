@@ -35,112 +35,138 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
-    </div>
-
-    <table class="layui-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>昵称</th>
-            <th>性别</th>
-            <th>QQ号</th>
-            <th>加入时间</th>
-            <th>是否允许评论</th>
-            <th>操作</th></tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>小明</td>
-            <td>男</td>
-            <td>13000000000</td>
-            <td>2017-01-01 11:11:42</td>
-            <td class="td-status">
-                <span class="layui-btn layui-btn-normal layui-btn-xs">已允许</span></td>
-            <td class="td-manage">
-                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="禁止">
-                    <i class="layui-icon">&#xe601;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-    <div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
+        <div class="layui-col-md12 x-so">
+            <input class="layui-input" placeholder="日期范围" name="dateTodate" id="dateTodate">
+            <input type="text" name="title" id="title" placeholder="请输入会员昵称" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-filter="reload" id="reload"><i class="layui-icon">&#xe615;</i></button>
         </div>
     </div>
-
+    <script type="text/html" id="bartool">
+        <a title="删除" lay-event="del" href="javascript:;">
+            <i class="layui-icon">&#xe640;</i>
+        </a>
+    </script>
+    <script type="text/html" id="isComment">
+        <input type="checkbox" name="comment" value="{{d.memberId}}" lay-skin="switch"
+               lay-text="YES|NO" lay-filter="comment" {{ d.comment == true ? 'checked' : '' }} />
+    </script>
+    <table class="layui-hide" id="I_am_a_table" lay-filter="I_am_a_table"></table>
 </div>
 <script>
+
+    /*日期搜索*/
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 
-        //执行一个laydate实例
         laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
+            elem: '#dateTodate'
+            ,type: 'datetime'
+            ,range: 'to'
         });
     });
 
-    /*用户-停用*/
-    function member_stop(obj,id){
-
-        if($(obj).attr('title')=='禁止'){
-            layer.confirm('确认要禁止吗？',function(index){
-                //发异步把用户状态进行更改
-                $(obj).attr('title','允许')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已禁止');
-                layer.msg('已禁止!',{icon: 5,time:1000});
-            });
-        }else{
-            layer.confirm('确认要允许吗？',function(index){
-                $(obj).attr('title','禁止')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已允许');
-                layer.msg('已允许!',{icon: 6,time:1000});
-            });
-        }
-    }
-
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
-    }
-
 </script>
-<script>var _hmt = _hmt || []; (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();</script>
+<script>
+    layui.use(['table','util'], function(){
+        var table = layui.table
+            ,form = layui.form
+            ,util = layui.util;
+
+        table.render({
+            elem: '#I_am_a_table'
+            ,id: 'I_am_a_table'
+            ,url:'${pageContext.request.contextPath}/member/getMembers'
+            ,method: 'post'
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'memberId', title:'ID'}
+                ,{field:'memberNickname', title:'昵称',width:200}
+                ,{field:'createTime', title:'加入时间',width:180,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+                ,{field:'comment', title:'是否允许评论', width:180,templet: '#isComment', unresize: true}
+                ,{field:'sex', title:'性别',width:110,templet:function(d){
+                        return  d.sex == true ? "男":"<span class='layui-red'>女</span>";
+                    } }
+                ,{field:'right', title: '操作', toolbar:"#bartool",align:"center"}
+            ]]
+            ,where: {
+                'dateTodate': '',
+                'title': null
+            }
+            ,page: true
+            ,request: {
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+            ,response: {
+                countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
+        });
+
+        // 执行搜索，表格重载
+        $('#reload').on('click', function () {
+            // 搜索条件
+            var dateTodate = $('#dateTodate').val();
+            var title = $('#title').val();
+            table.reload('I_am_a_table', {
+                method: 'post'
+                , where: {
+                    'dateTodate': dateTodate,
+                    'title': title
+                }
+                , page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //监听开关操作
+        form.on('switch(comment)', function(obj){
+            var memberId = this.value;
+            var val = obj.elem.checked;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/member/editSwitch"
+                ,data:{memberId:memberId,val:val}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        //监听工具条
+        table.on('tool(I_am_a_table)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('要删除吗'+data.memberId, function(res){
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/member/delMemberById",
+                        type: "POST",
+                        data:{"memberId":data.memberId},
+                        dataType: "json",
+                        success: function(res){
+
+                            if(res.code ==200){
+                                layer.alert('会员删除成功', {
+                                    title: "消息提醒",
+                                    btn: ['确定']
+                                },function (index, item) {
+                                    location.href="memberList.jsp";
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+
+                    });
+                });
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

@@ -5,17 +5,17 @@
     <div id="tuijian_content">
         <ul style="display:block;">
             <c:forEach items="${recommendedArtical}" var="artical">
-                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a></li>
+                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a></li>
             </c:forEach>
         </ul>
         <ul>
             <c:forEach items="${clickMost}" var="artical">
-                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a></li>
+                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a></li>
             </c:forEach>
         </ul>
         <ul>
             <c:forEach items="${commentMost}" var="artical">
-                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.id}.html">${artical.title}</a></li>
+                <li><a href="${pageContext.request.contextPath}/artical/info/${artical.articalId}.html">${artical.title}</a></li>
             </c:forEach>
         </ul>
     </div>

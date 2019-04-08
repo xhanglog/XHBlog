@@ -8,7 +8,7 @@
     <title>欢迎页面-X-admin2.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/xadmin.css">
@@ -35,118 +35,187 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
-    </div>
-    <table class="layui-table layui-form">
-        <thead>
-        <tr>
-            <!-- <th>
-              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th> -->
-            <th>ID</th>
-            <th>标题</th>
-            <th>所属类别</th>
-            <th>关键字</th>
-            <th>发布时间</th>
-            <th>允许评论</th>
-            <th>是否显示</th>
-            <th>是否推荐</th>
-            <th>操作</th></tr>
-        </thead>
-        <tbody>
-        <tr>
-            <!-- <td>
-              <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td> -->
-            <td>1</td>
-            <td><a href="#">这是一篇测试文章</a></td>
-            <td>java</td>
-            <td>java,web</td>
-            <td>2017-01-01 11:11:42</td>
-            <td>
-                <input type="checkbox" name="isComment"  lay-text="YES|NO"  checked="" lay-skin="switch">
-            </td>
-            <td>
-                <input type="checkbox" name="status"  lay-text="YES|NO"  checked="" lay-skin="switch">
-            </td>
-            <td class="td-status">
-                <input type="checkbox" name="recommended"  lay-text="YES|NO" lay-skin="switch">
-            <td class="td-manage">
-                <a title="编辑"  onclick="x_admin_show('编辑','writeBlog.html',600,400)" href="javascript:;">
-                    <i class="layui-icon">&#xe642;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-    <div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
+        <div class="layui-col-md12 x-so">
+            <input class="layui-input" placeholder="日期范围" name="dateTodate" id="dateTodate">
+            <input type="text" name="title" id="title" placeholder="请输入文章标题" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-filter="reload" id="reload"><i class="layui-icon">&#xe615;</i></button>
         </div>
     </div>
-
+    <script type="text/html" id="bartool">
+    <a title="编辑" lay-event="edit" href="javascript:;">
+        <i class="layui-icon">&#xe642;</i>
+    </a>
+    <a title="删除" lay-event="del" href="javascript:;">
+        <i class="layui-icon">&#xe640;</i>
+    </a>
+    </script>
+    <script type="text/html" id="isComment">
+        <input type="checkbox" name="comment" value="{{d.articalId}}" lay-skin="switch"
+               lay-text="YES|NO" lay-filter="comment" {{ d.comment == true ? 'checked' : '' }} />
+    </script>
+    <script type="text/html" id="status">
+        <input type="checkbox" name="status" value="{{d.articalId}}"
+               lay-skin="switch" lay-text="YES|NO" lay-filter="status" {{ d.status == true ? 'checked' : '' }} />
+    </script>
+    <script type="text/html" id="recommended">
+        <input type="checkbox" name="recommended" value="{{d.articalId}}"
+               lay-skin="switch" lay-text="YES|NO" lay-filter="recommended" {{ d.recommended == true ? 'checked' : '' }} />
+    </script>
+    <table class="layui-hide" id="I_am_a_table" lay-filter="I_am_a_table"></table>
 </div>
 <script>
+
+    /*日期搜索*/
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 
-        //执行一个laydate实例
         laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
+            elem: '#dateTodate'
+            ,type: 'datetime'
+            ,range: 'to'
         });
     });
 
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
-    }
-
-    /*function delAll (argument) {
-
-      var data = tableCheck.getData();
-
-      layer.confirm('确认要删除吗？'+data,function(index){
-          //捉到所有被选中的，发异步进行删除
-          layer.msg('删除成功', {icon: 1});
-          $(".layui-form-checked").not('.header').parents('tr').remove();
-      });
-    }*/
-
-    layui.use(['form'], function(){
-        form = layui.form;
-    });
 </script>
 <script>
-    var _hmt = _hmt || []; (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+    layui.use(['table','util'], function(){
+        var table = layui.table
+            ,form = layui.form
+            ,util = layui.util;
+
+        table.render({
+            elem: '#I_am_a_table'
+            ,id: 'I_am_a_table'
+            ,url:'${pageContext.request.contextPath}/artical/getArticals'
+            ,method: 'post'
+            ,cellMinWidth: 80
+            ,cols: [[
+                 {field:'articalId', title:'ID'}
+                ,{field:'title', title:'标题',width:200}
+                ,{field:'menuId', title:'所属类别',width:120}
+                ,{field:'createTime', title:'发布时间',width:180,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+                ,{field:'comment', title:'允许评论', width:110, templet: '#isComment', unresize: true}
+                ,{field:'status', title:'是否显示', width:110, templet: '#status', unresize: true}
+                ,{field:'recommended', title:'是否推荐', width:110, templet: '#recommended', unresize: true}
+                ,{field:'right', title: '操作', toolbar:"#bartool",align:"center"}
+            ]]
+            ,where: {
+                'dateTodate': '',
+                'title': null
+            }
+            ,page: true
+            ,request: {
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+            ,response: {
+                countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
+        });
+
+        //监听开关操作
+        form.on('switch(comment)', function(obj){
+            var articalId = this.value;
+            var val = obj.elem.checked;
+            var name = this.name;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/artical/editSwitch"
+                ,data:{articalId:articalId,val:val,name:name}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        form.on('switch(status)', function(obj){
+            var articalId = this.value;
+            var val = obj.elem.checked;
+            var name = this.name;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/artical/editSwitch"
+                ,data:{articalId:articalId,val:val,name:name}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        form.on('switch(recommended)', function(obj){
+            var articalId = this.value;
+            var val = obj.elem.checked;
+            var name = this.name;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/artical/editSwitch"
+                ,data:{articalId:articalId,val:val,name:name}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        // 执行搜索，表格重载
+        $('#reload').on('click', function () {
+            // 搜索条件
+            var dateTodate = $('#dateTodate').val();
+            var title = $('#title').val();
+            table.reload('I_am_a_table', {
+                method: 'post'
+                , where: {
+                    'dateTodate': dateTodate,
+                    'title': title
+                }
+                , page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //监听工具条
+        table.on('tool(I_am_a_table)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('要删除吗'+data.articalId, function(index){
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/artical/delArticalById",
+                        type: "POST",
+                        data:{"articalId":data.articalId},
+                        dataType: "json",
+                        success: function(res){
+
+                            if(res.code ==1){
+                                layer.alert('文章删除成功', {
+                                    title: "消息提醒",
+                                    btn: ['确定']
+                                },function (index, item) {
+                                    location.href="articalList.jsp";
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+
+                    });
+                });
+            }
+            else if(obj.event === 'edit'){
+                x_admin_show('编辑','${pageContext.request.contextPath}/artical/getArticalInfo?id='+data.articalId,600,400);
+            }
+        });
+    });
 </script>
 </body>
-
-</html>

@@ -11,6 +11,7 @@
         <result column="tag_create_time" property="tagCreateTime" jdbcType="TIMESTAMP" />
         <result column="tag_update_time" property="tagUpdateTime" jdbcType="TIMESTAMP" />
     </resultMap>
+
     <select id="getTagList" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Tag" >
         select * from tag ;
     </select>
@@ -18,4 +19,53 @@
     <select id="getTagByName" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Tag" >
         select * from tag where tag_name = #{tagName};
     </select>
+
+    <select id="getTagCount" resultType="integer">
+        select count(*) from tag;
+    </select>
+
+    <select id="getTags" resultMap="BaseResultMap">
+        select * from tag
+        <where>
+            <if test="tagName != ''">
+                tag_name like "%"#{tagName}"%"
+            </if>
+            <if test="start != null and end != null ">
+                and create_time between #{start} and #{end}
+            </if>
+        </where>
+        limit #{startRow},#{size};
+    </select>
+
+    <select id="getTagCountByCriteria" resultType="integer" >
+        select  count(*) from tag
+        <where>
+            <if test="tagName != ''">
+                tag_name like "%"#{tagName}"%"
+            </if>
+            <if test="start != null and end != null">
+                and create_time between #{start} and #{end}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTagById" resultMap="BaseResultMap">
+        select * from tag where tag_id = #{tagId};
+    </select>
+
+    <delete id="delTagById" parameterType="integer">
+        delete from tag where tag_id = #{tagId};
+    </delete>
+
+    <update id="editTagById" parameterType="cn.xhanglog.entity.Tag">
+        update tag set
+          tag_name = #{tagName},tag_description = #{tagDescription},tag_create_time = #{tagCreateTime}
+        where  tag_id = #{tagId};
+    </update>
+    
+    <insert id="addTag" parameterType="cn.xhanglog.entity.Tag">
+        insert into tag set
+          tag_name = #{tagName},tag_description = #{tagDescription},tag_create_time = #{tagCreateTime},
+          tag_update_time = #{tagUpdateTime}
+    </insert>
 </mapper>

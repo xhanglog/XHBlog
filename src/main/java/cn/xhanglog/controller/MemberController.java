@@ -2,6 +2,7 @@ package cn.xhanglog.controller;
 
 import cn.xhanglog.entity.Member;
 import cn.xhanglog.service.MemberService;
+import cn.xhanglog.util.Page;
 import com.qq.connect.QQConnectException;
 import com.qq.connect.api.OpenID;
 import com.qq.connect.api.qzone.UserInfo;
@@ -10,14 +11,20 @@ import com.qq.connect.javabeans.qzone.UserInfoBean;
 import com.qq.connect.oauth.Oauth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -96,6 +103,10 @@ public class MemberController {
             }else {
                 member.setSex(false);
             }
+            Date date = new Date();
+            String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+            Timestamp dt = Timestamp.valueOf(nowTime);//把时间转换
+            member.setCreateTime(dt);
             member.setComment(true);
             Member mem = memberService.getMemberById(openID);
             if(mem == null){
@@ -107,5 +118,61 @@ public class MemberController {
         request.getSession().setAttribute("avatar",avatar);
         return "redirect:/index.html";
 
+    }
+
+    @RequestMapping("/member/getMembers")
+    @ResponseBody
+    public Page<Member> getArticals(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String dateTodate, String title){
+        Page<Member> rs = new Page<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String st = "";
+        String en = "";
+        Date start = null;
+        Date end = null;
+        if(!dateTodate.equals("")){
+            String[] sourceStrArray = dateTodate.split("to");
+            st =  sourceStrArray[0];
+            en =  sourceStrArray[1];
+        }
+        try {
+            if (!st.equals("") && !en.equals("")){
+                start = sdf.parse(st);
+                end = sdf.parse(en);
+            }
+            List<Member> members = memberService.getMembers(page,size,start,end,title);
+            Integer memberCount = memberService.getMemberCountByCriteria(start,end,title);
+            rs.setRows(members);
+            rs.setTotal(memberCount);
+            rs.setCode(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    @RequestMapping("/member/editSwitch")
+    @ResponseBody
+    public Map<String,Integer> editSwitch(String memberId,Boolean val){
+        Map<String,Integer> res = new HashMap<>();
+        Integer result = memberService.editSwitch(memberId,val);
+        if (result == 1){
+            res.put("code",200);
+        }else {
+            res.put("code",202);
+        }
+        return res;
+    }
+
+    @RequestMapping("/member/delMemberById")
+    @ResponseBody
+    public Map<String,Integer> delMemberById(String memberId){
+        Map<String,Integer> res = new HashMap<>();
+        Integer result = memberService.delMemberById(memberId);
+        if (result == 1){
+            res.put("code",200);
+        }else {
+            res.put("code",202);
+        }
+        return res;
     }
 }

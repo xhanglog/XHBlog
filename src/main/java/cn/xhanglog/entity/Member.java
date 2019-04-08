@@ -13,6 +13,7 @@ public class Member implements Serializable {
     private String memberImage;//用户头像
     private Boolean sex;//1为男，0为女
     private Boolean comment;//是否允许评论
+    private Date createTime;
 
     public String getMemberNickname() {
         return memberNickname;
@@ -52,5 +53,13 @@ public class Member implements Serializable {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

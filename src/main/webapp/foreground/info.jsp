@@ -41,7 +41,7 @@
                         </ul>
                     </div>
                     <div class="news-content" style="margin: 0 18px 18px 26px ">
-                        ${artical.content}
+                        ${artical.editorValue}
                     </div>
                     <!-- </div> -->
                 </div>
@@ -49,7 +49,7 @@
                     <div class="col-sm-6 prevnew">
                         <c:choose>
                             <c:when test="${preArtical != null}">
-                                <a href="${pageContext.request.contextPath}/artical/info/${preArtical.id}.html">
+                                <a href="${pageContext.request.contextPath}/artical/info/${preArtical.articalId}.html">
                                     &lt上一篇:<br>
                                         ${preArtical.title}
                                 </a>
@@ -64,7 +64,7 @@
                     <div class="col-sm-6 nextnew">
                         <c:choose>
                             <c:when test="${afterArtical != null}">
-                                <a href="${pageContext.request.contextPath}/artical/info/${afterArtical.id}.html">
+                                <a href="${pageContext.request.contextPath}/artical/info/${afterArtical.articalId}.html">
                                     下一篇&gt;<br>
                                         ${afterArtical.title}
                                 </a>
@@ -137,7 +137,7 @@
 <input id="openID" value="${openID}" type="hidden" />
 <input id="avatar" value="${avatar}" type="hidden" />
 <input id="qqname" value="${qqname}" type="hidden" />
-<input id="articalId" value="${artical.id}" type="hidden" />
+<input id="articalId" value="${artical.articalId}" type="hidden" />
 <footer style="margin-top: 15px">
     <p>Design by <a href="#" target="_blank">贰月小巷</a><span>&nbsp;&nbsp;&nbsp;蜀ICP备18012986号-1</span></p>
 </footer>

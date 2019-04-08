@@ -14,6 +14,8 @@ public class Tag implements Serializable {
     private Date tagCreateTime;
     private Date tagUpdateTime;
 
+    private String condition;
+
     public String getTagName() {
         return tagName;
     }
@@ -52,5 +54,13 @@ public class Tag implements Serializable {
 
     public void setTagId(Integer tagId) {
         this.tagId = tagId;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 }
