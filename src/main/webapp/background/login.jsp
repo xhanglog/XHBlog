@@ -13,6 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/lib/layui/css/layui.css" media="all" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/login.css" media="all" />
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <style type="text/css">
     body{
@@ -31,7 +32,7 @@
         </div>
         <div class="layui-form-item form_code">
             <input class="layui-input" name="code" placeholder="验证码"  type="text" autocomplete="off">
-            <div class="code"><img src="../../images/code.jpg" width="116" height="36"></div>
+            <div class="code"><a href=""><img src="${pageContext.request.contextPath}/user/validcode" width="116" height="36"></a></div>
         </div>
         <button class="layui-btn login_btn" lay-submit="" lay-filter="login">登录</button>
     </form>
@@ -64,6 +65,17 @@
             return false;
         });
     });
+
+    $(function(){
+        function flushCode(){
+            alert("1");
+            $("a").click(function(){
+                //浏览器带有缓存功能,不会多次请求相同数据
+                $("img").attr("src","validcode?date="+new Date());
+                return false;
+            });
+        }
+    })
 </script>
 </body>
 </html>

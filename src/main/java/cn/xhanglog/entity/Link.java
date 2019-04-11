@@ -35,14 +35,6 @@ public class Link implements Serializable {
         this.linkUrl = linkUrl;
     }
 
-    public String getLinkName() {
-        return linkName;
-    }
-
-    public void setLinkName(String linkName) {
-        this.linkName = linkName;
-    }
-
     public String getLinkOwnerNickname() {
         return linkOwnerNickname;
     }
@@ -97,5 +89,13 @@ public class Link implements Serializable {
 
     public void setLinkStatus(Boolean linkStatus) {
         this.linkStatus = linkStatus;
+    }
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
     }
 }

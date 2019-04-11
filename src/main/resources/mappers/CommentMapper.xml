@@ -11,13 +11,16 @@
         <result column="comment_pname" property="commentPname" jdbcType="VARCHAR" />
         <result column="comment_pid" property="commentPid" jdbcType="INTEGER" />
         <result column="zid" property="zid" jdbcType="INTEGER" />
-        <result column="comment_status" property="commentStatus" jdbcType="INTEGER" />
+        <result column="comment_status" property="commentStatus" jdbcType="BIT" />
         <result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
+        <result column="title" property="articalName" jdbcType="VARCHAR" />
         <result column="comment_create_time" property="commentCreateTime" jdbcType="TIMESTAMP" />
     </resultMap>
+
     <select id="getCommentsByArticalId" resultMap="BaseResultMap" >
         select * from t_comment where article_id = #{id};
     </select>
+
     <insert id="addComment" useGeneratedKeys="true" keyProperty="commentId">
         insert into t_comment
         set
@@ -25,7 +28,41 @@
         comment_pid = #{commentPid},zid = #{zid},comment_status = #{commentStatus},comment_content = #{commentContent},
         comment_create_time = #{commentCreateTime};
     </insert>
+
     <update id="updateComment">
         update t_comment set zid = #{commentId} where comment_id = #{commentId};
     </update>
+
+    <select id="getComments" resultMap="BaseResultMap">
+        select * from t_comment
+        <where>
+            <if test="title != ''">
+                title like "%"#{title}"%"
+            </if>
+            <if test="start != null and end != null ">
+                and comment_create_time between #{start} and #{end}
+            </if>
+        </where>
+        limit #{startRow},#{size};
+    </select>
+
+    <select id="getCommentCountByCriteria" resultType="integer" >
+        select  count(*) from t_comment
+        <where>
+            <if test="title != ''">
+                title like "%"#{title}"%"
+            </if>
+            <if test="start != null and end != null">
+                and comment_create_time between #{start} and #{end}
+            </if>
+        </where>
+    </select>
+
+    <update id="editSwitch" >
+        update t_comment set comment_status = #{val} where comment_id = #{commentId};
+    </update>
+
+    <delete id="delCommentById" parameterType="integer">
+        delete from t_comment where comment_id = #{commentId};
+    </delete>
 </mapper>

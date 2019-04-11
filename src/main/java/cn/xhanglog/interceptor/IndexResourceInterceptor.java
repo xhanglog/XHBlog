@@ -34,7 +34,8 @@ public class IndexResourceInterceptor implements WebRequestInterceptor {
     public void preHandle(WebRequest request) throws Exception {
 
         /*获取菜单列表*/
-        List<Menu> menuList = menuService.getAllMenu();
+        Integer st = 0;
+        List<Menu> menuList = menuService.getAllMenu(st);
         for (Menu menu : menuList) {
             menu.setMenuLeaval(0);
             for (Menu Submenu : menuList) {

@@ -19,4 +19,18 @@ public interface LinkService {
      * @return
      */
     Integer getLinkCount();
+
+    Integer editSwitch(Integer linkId, Boolean val, String name);
+
+    Link getLinkInfo(Integer linkId);
+
+    Integer addLink(Link link);
+
+    Integer editLink(Link link);
+
+    List<Link> getLinks(Integer page, Integer size, String title);
+
+    Integer getLinkCountByCriteria(String title);
+
+    Integer delLinkById(Integer linkId);
 }

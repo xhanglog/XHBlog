@@ -8,7 +8,7 @@
     <title>欢迎页面-X-admin2.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/xadmin.css">
@@ -25,97 +25,101 @@
 <body>
 <div class="x-body">
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./admin-add.html')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加菜单分类','./menu_add_edit.jsp')"><i class="layui-icon"></i>添加</button>
         <span class="x-right" style="line-height:40px">共有数据：88 条</span>
     </xblock>
-    <table class="layui-table layui-form">
-        <thead>
-        <tr>
-            <th width="70">ID</th>
-            <th>栏目名</th>
-            <th width="250">路径</th>
-            <th width="50">排序</th>
-            <th width="50">状态</th>
-            <th width="220">操作</th>
-        </thead>
-        <tbody class="x-cate">
-        <tr cate-id='1' fid='0' >
-            <td>1</td>
-            <td>
-                <i class="layui-icon x-show" status='true'>&#xe623;</i>新闻
-            </td>
-            <td>1</td>
-            <td>1</td>
-            <td>
-                <input type="checkbox" name="switch"  lay-text="开启|停用"  checked="" lay-skin="switch">
-            </td>
-            <td class="td-manage">
-                <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
-                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-            </td>
-        </tr>
-        <tr cate-id='2' fid='1' >
-            <td>2</td>
-            <td>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                ├国内新闻
-            </td>
-            <td>1</td>
-            <td>1</td>
-            <td>
-                <input type="checkbox" name="switch"  lay-text="开启|停用"  checked="" lay-skin="switch">
-            </td>
-            <td class="td-manage">
-                <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
-                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-            </td>
-        </tr>
-        <tr cate-id='3' fid='1' >
-            <td>3</td>
-            <td>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                ├国外新闻
-            </td>
-            <td>1</td>
-            <td>1</td>
-            <td>
-                <input type="checkbox" name="switch"  lay-text="开启|停用"  checked="" lay-skin="switch">
-            </td>
-            <td class="td-manage">
-                <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
-                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <script type="text/html" id="bartool">
+        <button class="layui-btn layui-btn layui-btn-xs"  lay-event="edit" ><i class="layui-icon">&#xe642;</i>编辑</button>
+        <button class="layui-btn-danger layui-btn layui-btn-xs" lay-event="del" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
+    </script>
+    <script type="text/html" id="available">
+        <input type="checkbox" name="available" value="{{d.menuId}}"
+               lay-skin="switch" lay-text="显示|隐藏" lay-filter="available" {{ d.available == true ? 'checked' : '' }} />
+    </script>
+
+    <table class="layui-hide" id="I_am_a_table" lay-filter="I_am_a_table"></table>
 </div>
 <style type="text/css">
 
 </style>
 <script>
-    layui.use(['form'], function(){
-        form = layui.form;
+    layui.use(['table','util'], function(){
+        var table = layui.table
+            ,form = layui.form
+            ,util = layui.util;
 
-    });
-
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
+        table.render({
+            elem: '#I_am_a_table'
+            ,id: 'I_am_a_table'
+            ,url:'${pageContext.request.contextPath}/menu/getMenus'
+            ,method: 'post'
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'menuId', title:'编号',sort: true}
+                ,{field:'pid', title:'父编号'}
+                ,{field:'menuName', title:'名称',width:100}
+                ,{field:'menuSort', title:'排序序号'}
+                ,{field:'menuDescription', title:'描述',width:180}
+                ,{field:'lookView', title:'视图',width:60}
+                ,{field:'menuLeaval', title:'菜单级别',width:100,templet:function(d){
+                        return  d.menuLeaval == 1 ? "一级菜单":"<span class='layui-red'>二级菜单</span>";
+                    }}
+                ,{field:'menuCreateTime', title:'创建时间',width:180,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+                ,{field:'available', title:'状态',templet: '#available', unresize: true}
+                ,{field:'right', title: '操作', toolbar:"#bartool",align:"center",width:200}
+            ]]
         });
-    }
+
+        //监听开关操作
+        form.on('switch(available)', function(obj){
+            var menuId = this.value;
+            var val = obj.elem.checked;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/menu/editSwitch"
+                ,data:{menuId:menuId,val:val}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        //监听工具条
+        table.on('tool(I_am_a_table)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('要删除吗'+data.menuId, function(res){
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/menu/delMenuById",
+                        type: "POST",
+                        data:{"menuId":data.menuId},
+                        dataType: "json",
+                        success: function(res){
+
+                            if(res.code == 200){
+                                layer.alert('会员删除成功', {
+                                    title: "消息提醒",
+                                    btn: ['确定']
+                                },function (index, item) {
+                                    location.href="memberList.jsp";
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                x_admin_show('编辑','${pageContext.request.contextPath}/menu/getMenuInfo?menuId='+data.menuId,600,400);
+            }
+        });
+    });
 </script>
-<script>var _hmt = _hmt || []; (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();</script>
 </body>
 
 </html>

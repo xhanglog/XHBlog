@@ -8,7 +8,7 @@
     <title>欢迎页面-X-admin2.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/xadmin.css">
@@ -25,120 +25,152 @@
 <body class="layui-anim layui-anim-up">
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
-    </div>
-    <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
-    </xblock>
-    <table class="layui-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>链接名称</th>
-            <th>链接地址</th>
-            <th>所有者</th>
-            <th>联系方式</th>
-            <th>描述</th>
-            <th>创建时间</th>
-            <th>状态</th>
-            <th>操作</th></tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>小明</td>
-            <td>男</td>
-            <td>13000000000</td>
-            <td>admin@mail.com</td>
-            <td>北京市 海淀区</td>
-            <td>2017-01-01 11:11:42</td>
-            <td class="td-status">
-                <span class="layui-btn layui-btn-normal layui-btn-xs">已启用</span></td>
-            <td class="td-manage">
-                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="停用">
-                    <i class="layui-icon">&#xe601;</i>
-                </a>
-                <a title="编辑"  onclick="x_admin_show('编辑','member-edit.html',600,400)" href="javascript:;">
-                    <i class="layui-icon">&#xe642;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-    <div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
+        <div class="layui-col-md12 x-so">
+            <input type="text" name="title" id="title" placeholder="请输入链接名称" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-filter="reload" id="reload"><i class="layui-icon">&#xe615;</i></button>
         </div>
     </div>
-
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('添加友链','./link_add_edit.jsp',600,400)"><i class="layui-icon"></i>添加</button>
+        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+    </xblock>
+    <script type="text/html" id="bartool">
+        <a title="编辑" lay-event="edit" href="javascript:;">
+            <i class="layui-icon">&#xe642;</i>
+        </a>
+        <a title="删除" lay-event="del" href="javascript:;">
+            <i class="layui-icon">&#xe640;</i>
+        </a>
+    </script>
+    <script type="text/html" id="linkStatus">
+        <input type="checkbox" name="linkStatus" value="{{d.id}}"
+               lay-skin="switch" lay-text="YES|NO" lay-filter="linkStatus" {{ d.linkStatus == true ? 'checked' : '' }} />
+    </script>
+    <script type="text/html" id="showIndex">
+        <input type="checkbox" name="showIndex" value="{{d.id}}"
+               lay-skin="switch" lay-text="YES|NO" lay-filter="showIndex" {{ d.showIndex == true ? 'checked' : '' }} />
+    </script>
+    <table class="layui-hide" id="I_am_a_table" lay-filter="I_am_a_table"></table>
 </div>
 <script>
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
+    layui.use(['table','util'], function(){
+        var table = layui.table
+            ,form = layui.form
+            ,util = layui.util;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
+        table.render({
+            elem: '#I_am_a_table'
+            ,id: 'I_am_a_table'
+            ,url:'${pageContext.request.contextPath}/link/getLinks'
+            ,method: 'post'
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'id', title:'ID'}
+                ,{field:'linkName', title:'链接名称',width:200}
+                ,{field:'linkUrl', title:'链接地址',width:200}
+                ,{field:'linkOwnerNickname', title:'所有者',width:200}
+                ,{field:'linkOwnerContact', title:'联系方式',width:200}
+                ,{field:'linkDescription', title:'描述',width:200}
+                ,{field:'linkCreateTime', title:'创建时间',width:180,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+                ,{field:'linkStatus', title:'状态',width:200,templet: '#linkStatus', unresize: true}
+                ,{field:'showIndex', title:'首页显示',width:200,templet: '#showIndex', unresize: true}
+                ,{field:'right', title: '操作', toolbar:"#bartool",align:"center"}
+            ]]
+            ,where: {
+                'title': null
+            }
+            ,page: true
+            ,request: {
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+            ,response: {
+                countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
         });
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
+        //监听开关操作
+        form.on('switch(linkStatus)', function(obj){
+            var linkId = this.value;
+            var val = obj.elem.checked;
+            var name = this.name;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/link/editSwitch"
+                ,data:{linkId:linkId,val:val,name:name}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        form.on('switch(showIndex)', function(obj){
+            var articalId = this.value;
+            var val = obj.elem.checked;
+            var name = this.name;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/link/editSwitch"
+                ,data:{articalId:articalId,val:val,name:name}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        // 执行搜索，表格重载
+        $('#reload').on('click', function () {
+            // 搜索条件
+            var title = $('#title').val();
+            table.reload('I_am_a_table', {
+                method: 'post'
+                , where: {
+                    'title': title
+                }
+                , page: {
+                    curr: 1
+                }
+            });
+        });
+        //监听工具条
+        table.on('tool(I_am_a_table)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('要删除吗'+data.id, function(res){
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/link/delLinkById",
+                        type: "POST",
+                        data:{"linkId":data.id},
+                        dataType: "json",
+                        success: function(res){
+
+                            if(res.code == 200){
+                                layer.alert('会员删除成功', {
+                                    title: "消息提醒",
+                                    btn: ['确定']
+                                },function (index, item) {
+                                    location.href="memberList.jsp";
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                x_admin_show('编辑','${pageContext.request.contextPath}/link/getLinkInfo?linkId='+data.id,600,400);
+            }
         });
     });
-
-    /*用户-停用*/
-    function member_stop(obj,id){
-
-        if($(obj).attr('title')=='停用'){
-            layer.confirm('确认要停用吗？',function(index){
-                //发异步把用户状态进行更改
-                $(obj).attr('title','启用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!',{icon: 5,time:1000});
-            });
-        }else{
-            layer.confirm('确认要启用吗？',function(index){
-                $(obj).attr('title','停用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!',{icon: 6,time:1000});
-            });
-        }
-    }
-
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
-    }
-
 </script>
-<script>var _hmt = _hmt || []; (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();</script>
-</body>
 
 </html>

@@ -15,10 +15,45 @@
         <result column="menu_create_time" property="menuCreateTime" jdbcType="TIMESTAMP" />
         <result column="menu_update_time" property="menuUpdateTime" jdbcType="TIMESTAMP" />
     </resultMap>
+
     <select id="getAllMenu" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Menu" >
-        select * from menu where available = 1 order by menu_sort;
+        select * from menu
+        <where>
+            <if test="st == 0">
+                available = 1
+            </if>
+        </where>
+        order by menu_sort;
     </select>
+
     <select id="getMenuByName" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Menu" >
         select * from menu where menu_name = #{menuName};
     </select>
+
+    <select id="getMenuCount" resultType="integer">
+        select count(*) from  menu;
+    </select>
+
+    <update id="editSwitch" >
+        update menu set available = #{val} where menu_id = #{menuId};
+    </update>
+
+    <delete id="delMenuById" parameterType="integer">
+        delete from menu where menu_id = #{menuId};
+    </delete>
+
+    <select id="getMenuInfo" resultMap="BaseResultMap">
+        select * from menu where menu_id = #{menuId};
+    </select>
+
+    <insert id="addMenu" parameterType="Menu">
+        insert into menu set pid = #{pid},menu_name = #{menuName},menu_sort = #{menuSort},available = #{available},
+        look_view = #{lookView},menu_description = #{menuDescription},menu_create_time = #{menuCreateTime},menu_update_time = #{menuUpdateTime};
+    </insert>
+
+    <update id="editMenu" parameterType="Menu">
+        update menu set pid = #{pid},menu_name = #{menuName},menu_sort = #{menuSort},available = #{available},
+        look_view = #{lookView},menu_description = #{menuDescription},menu_update_time = #{menuUpdateTime}
+        where menu_id = #{menuId};
+    </update>
 </mapper>

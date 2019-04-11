@@ -11,10 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: Xhang
@@ -29,7 +35,14 @@ public class UserController {
     @RequestMapping("login")
     @ResponseBody
     public Map<String,Object> login(@RequestBody SysUser user, HttpServletRequest request){
-        Map<String, Object> res = userService.getUserByName(user,request);
+        Map<String, Object> res = new HashMap<>();
+        String validcode = request.getSession().getAttribute("validcode").toString();	//放在session中生成的验证码
+        if(user.getCode().equals(validcode)){
+            res = userService.getUserByName(user,request);
+        }else {
+            res.put("code",1);
+            res.put("msg","验证码输入错误!");
+        }
         return res;
     }
 
@@ -83,5 +96,52 @@ public class UserController {
             res.put("code",202);
         }
         return res;
+    }
+
+    @RequestMapping("validcode")
+    public void validcode(HttpServletRequest request, HttpServletResponse response){
+        //创建一张图片
+        //单位:像素
+        BufferedImage image =  new BufferedImage(200, 100, BufferedImage.TYPE_INT_RGB);
+
+        //透明的玻璃
+        //向画板上画内容之前必须先设置画笔.
+        Graphics2D gra = image.createGraphics();
+        gra.setColor(Color.WHITE);
+
+        //从哪个坐标开始填充, 后两个参数,矩形区域
+        gra.fillRect(0, 0, 200, 100);
+
+        List<Integer> randList = new ArrayList<Integer>();
+        Random random =new Random();
+        for (int i = 0 ;i<4;i++) {
+            randList.add(random.nextInt(10));
+        }
+
+        //设置字体
+        gra.setFont(new Font("宋体",Font.ITALIC|Font.BOLD,40));
+        Color[] colors = new Color[]{Color.RED,Color.BLACK,Color.BLUE,Color.GREEN,Color.ORANGE,Color.GRAY};
+        for (int i = 0; i < randList.size(); i++) {
+            gra.setColor(colors[random.nextInt(colors.length)]);
+            gra.drawString(randList.get(i)+"", i*40, 70+(random.nextInt(21)-10));
+        }
+
+        for (int i = 0; i < 2; i++) {
+            gra.setColor(colors[random.nextInt(colors.length)]);
+            //画横线
+            gra.drawLine(0, random.nextInt(101), 200, random.nextInt(101));
+        }
+
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            ImageIO.write(image, "jpg", outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //工具类
+        //把验证码放入到session中
+        HttpSession session = request.getSession();
+        session.setAttribute("validcode", ""+randList.get(0)+randList.get(1)+randList.get(2)+randList.get(3));
     }
 }

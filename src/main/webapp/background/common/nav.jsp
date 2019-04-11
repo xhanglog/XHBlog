@@ -8,7 +8,7 @@
     </div>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">admin</a>
+            <a href="javascript:;">${user.sysUserName}</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
                 <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
@@ -96,12 +96,6 @@
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-                    <li>
-                        <a _href="${pageContext.request.contextPath}/background/applyList.jsp">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>申请列表</cite>
-                        </a>
-                    </li>
                     <li>
                         <a _href="${pageContext.request.contextPath}/background/linkList.jsp">
                             <i class="iconfont">&#xe6a7;</i>

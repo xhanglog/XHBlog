@@ -14,6 +14,7 @@
         <result column="link_update_time" property="linkUpdateTime" jdbcType="TIMESTAMP" />
         <result column="showIndex" property="showIndex" jdbcType="BIT" />
     </resultMap>
+
     <select id="getShowIndexLinkList" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Link" >
         select * from link where showIndex = 1;
     </select>
@@ -21,4 +22,53 @@
     <select id="getLinkCount" resultType="integer">
        select count(*) from link;
     </select>
+
+    <select id="getLinks" resultMap="BaseResultMap">
+        select * from link
+        <where>
+            <if test="linkName != ''">
+                link_name like "%"#{linkName}"%"
+            </if>
+        </where>
+        limit #{startRow},#{size};
+    </select>
+
+    <select id="getLinkCountByCriteria" resultType="integer">
+        select count(*) from link
+        <where>
+            <if test="linkName != ''">
+                link_name like "%"#{linkName}"%"
+            </if>
+        </where>
+    </select>
+
+    <update id="editSwitch" statementType="STATEMENT">
+        update link set
+          ${name} = ${val}
+        where link_id = ${linkId}
+    </update>
+
+    <select id="getLinkInfo" resultMap="BaseResultMap">
+        select * from link where link_id = #{linkId};
+    </select>
+
+    <insert id="addLink" parameterType="Link">
+        insert into link set
+          link_url = #{linkUrl},link_name = #{linkName},link_owner_nickname = #{linkOwnerNickname},
+          link_owner_contact = #{linkOwnerContact},link_description = #{linkDescription},link_status = #{linkStatus},
+          link_create_time = #{linkCreateTime},link_update_time = #{linkUpdateTime},showIndex = #{showIndex};
+
+    </insert>
+
+    <update id="editLink" parameterType="Link">
+        update link set
+          link_url = #{linkUrl},link_name = #{linkName},link_owner_nickname = #{linkOwnerNickname},
+          link_owner_contact = #{linkOwnerContact},link_description = #{linkDescription},link_status = #{linkStatus},
+          link_update_time = #{linkUpdateTime},showIndex = #{showIndex}
+        where link_id = #{linkId}
+    </update>
+
+    <delete id="delLinkById" parameterType="integer">
+        delete from link where link_id = #{linkId};
+    </delete>
 </mapper>

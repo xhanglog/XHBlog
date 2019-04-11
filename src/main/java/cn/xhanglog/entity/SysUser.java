@@ -15,6 +15,7 @@ public class SysUser implements Serializable {
     private String sysUserDescription;
     private Boolean status;//状态，1为可用
 
+    private String code;//验证码
 
     public String getSysUserName() {
         return sysUserName;
@@ -70,5 +71,13 @@ public class SysUser implements Serializable {
 
     public void setSysUserId(Integer sysUserId) {
         this.sysUserId = sysUserId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

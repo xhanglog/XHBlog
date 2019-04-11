@@ -14,11 +14,12 @@ public class Comment implements Serializable {
     private Integer zid;//最高级的父id
     private Integer commentPid;//该评论的父ID
     private String commentPname;
-    private Integer commentStatus;//评论状态，0 待审核 1 审核通过 2 审核未通过
+    private Boolean commentStatus;//评论状态
     private String commentContent;//评论内容
     private Date commentCreateTime;
 
     private String memberName;
+    private String articalName;
     private String memberPic;//用户头像
 
     public Integer getCommentId() {
@@ -43,14 +44,6 @@ public class Comment implements Serializable {
 
     public void setCommentPid(Integer commentPid) {
         this.commentPid = commentPid;
-    }
-
-    public Integer getCommentStatus() {
-        return commentStatus;
-    }
-
-    public void setCommentStatus(Integer commentStatus) {
-        this.commentStatus = commentStatus;
     }
 
     public String getCommentContent() {
@@ -107,5 +100,21 @@ public class Comment implements Serializable {
 
     public void setMemberPic(String memberPic) {
         this.memberPic = memberPic;
+    }
+
+    public Boolean getCommentStatus() {
+        return commentStatus;
+    }
+
+    public void setCommentStatus(Boolean commentStatus) {
+        this.commentStatus = commentStatus;
+    }
+
+    public String getArticalName() {
+        return articalName;
+    }
+
+    public void setArticalName(String articalName) {
+        this.articalName = articalName;
     }
 }

@@ -8,7 +8,7 @@
     <title>欢迎页面-X-admin2.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/background/css/xadmin.css">
@@ -35,153 +35,138 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
-    </div>
-    <table class="layui-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>评论文章</th>
-            <th>评论人</th>
-            <th>评论内容</th>
-            <th>评论时间</th>
-            <th>状态</th>
-            <th>操作</th>
-        </thead>
-        <tbody class="x-cate">
-        <tr cate-id='1' fid='0' >
-            <td>1</td>
-            <td>
-                <i class="layui-icon x-show" status='true'>&#xe623;</i>新闻
-            </td>
-            <td>1</td>
-            <td>2018-09-12 16:32:33</td>
-            <td>1</td>
-            <td class="td-status">
-                <span class="layui-btn layui-btn-normal layui-btn-xs">已显示</span></td>
-            <td class="td-manage">
-                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="隐藏">
-                    <i class="layui-icon">&#xe601;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-        <tr cate-id='2' fid='1' >
-            <td>2</td>
-            <td>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                ├国内新闻
-            </td>
-            <td>1</td>
-            <td>1</td>
-            <td>2018-09-12 16:32:33</td>
-            <td>
-                <span class="layui-btn layui-btn-normal layui-btn-xs">已显示</span></td>
-            </td>
-            <td class="td-manage">
-                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="隐藏">
-                    <i class="layui-icon">&#xe601;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-        <tr cate-id='3' fid='1' >
-            <td>3</td>
-            <td>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                ├国外新闻
-            </td>
-            <td>1</td>
-            <td>1</td>
-            <td>2018-09-12 16:32:33</td>
-            <td>
-                <span class="layui-btn layui-btn-normal layui-btn-xs">已显示</span></td>
-            </td>
-            <td class="td-manage">
-                <a onclick="member_stop(this,'10001')" href="javascript:;"  title="隐藏">
-                    <i class="layui-icon">&#xe601;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
+        <div class="layui-col-md12 x-so">
+            <input class="layui-input" placeholder="日期范围" name="dateTodate" id="dateTodate">
+            <input type="text" name="title" id="title" placeholder="请输入文章标题" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-filter="reload" id="reload"><i class="layui-icon">&#xe615;</i></button>
         </div>
     </div>
-
+    <script type="text/html" id="bartool">
+        <a title="删除" lay-event="del" href="javascript:;">
+            <i class="layui-icon">&#xe640;</i>
+        </a>
+    </script>
+    <script type="text/html" id="commentStatus">
+        <input type="checkbox" name="commentStatus" value="{{d.commentId}}"
+               lay-skin="switch" lay-text="YES|NO" lay-filter="commentStatus" {{ d.commentStatus == true ? 'checked' : '' }} />
+    </script>
+    <table class="layui-hide" id="I_am_a_table" lay-filter="I_am_a_table"></table>
 </div>
 <script>
+
+    /*日期搜索*/
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 
-        //执行一个laydate实例
         laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
+            elem: '#dateTodate'
+            ,type: 'datetime'
+            ,range: 'to'
         });
     });
 
-    /*用户-停用*/
-    function member_stop(obj,id){
-
-        if($(obj).attr('title')=='隐藏'){
-            layer.confirm('确认要隐藏吗？',function(index){
-                //发异步把用户状态进行更改
-                $(obj).attr('title','显示')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已隐藏');
-                layer.msg('已隐藏!',{icon: 5,time:1000});
-            });
-        }else{
-            layer.confirm('确认要显示吗？',function(index){
-                $(obj).attr('title','隐藏')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已显示');
-                layer.msg('已显示!',{icon: 6,time:1000});
-            });
-        }
-    }
-
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
-    }
 </script>
-<script>var _hmt = _hmt || []; (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();</script>
+<script>
+    layui.use(['table','util'], function(){
+        var table = layui.table
+            ,form = layui.form
+            ,util = layui.util;
+
+        table.render({
+            elem: '#I_am_a_table'
+            ,id: 'I_am_a_table'
+            ,url:'${pageContext.request.contextPath}/comment/getComments'
+            ,method: 'post'
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'commentId', title:'评论编号'}
+                ,{field:'zid', title:'一级评论编号',sort: true}
+                ,{field:'memberName', title:'评论人',width:200}
+                ,{field:'commentPname', title:'被评论人',width:200}
+                ,{field:'articalName', title:'文章标题',width:120}
+                ,{field:'commentContent', title:'评论内容',width:120}
+                ,{field:'commentStatus', title:'评论状态', width:110, templet: '#commentStatus', unresize: true}
+                ,{field:'commentCreateTime', title:'评论时间',width:180,templet:function(d){return util.toDateString(d.commentCreateTime, "yyyy-MM-dd HH:mm:ss");}}
+                ,{field:'right', title: '操作', toolbar:"#bartool",align:"center"}
+            ]]
+            ,where: {
+                'dateTodate': '',
+                'title': null
+            }
+            ,page: true
+            ,request: {
+                limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+            ,response: {
+                countName: 'total' //规定数据总数的字段名称，默认：count
+                ,dataName: 'rows' //规定数据列表的字段名称，默认：data
+            }
+        });
+
+        //监听开关操作
+        form.on('switch(commentStatus)', function(obj){
+            var commentId = this.value;
+            var val = obj.elem.checked;
+            $.ajax({
+                type: 'POST'
+                ,url:"${pageContext.request.contextPath}/comment/editSwitch"
+                ,data:{commentId:commentId,val:val}
+                ,success:function (res) {
+                    if(res.code == 200){
+                        layer.tips('温馨提示：状态修改成功!', obj.othis);
+                    }else {
+                        layer.tips('温馨提示：状态修改失败!', obj.othis);
+                    }
+                }
+            });
+        });
+
+        // 执行搜索，表格重载
+        $('#reload').on('click', function () {
+            // 搜索条件
+            var dateTodate = $('#dateTodate').val();
+            var title = $('#title').val();
+            table.reload('I_am_a_table', {
+                method: 'post'
+                , where: {
+                    'dateTodate': dateTodate,
+                    'title': title
+                }
+                , page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //监听工具条
+        table.on('tool(I_am_a_table)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('要删除吗'+data.commentId, function(index){
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/comment/delCommentById",
+                        type: "POST",
+                        data:{"commentId":data.commentId},
+                        dataType: "json",
+                        success: function(res){
+
+                            if(res.code ==200){
+                                layer.alert('删除成功', {
+                                    title: "消息提醒",
+                                    btn: ['确定']
+                                },function (index, item) {
+                                    location.href="commentList.jsp";
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

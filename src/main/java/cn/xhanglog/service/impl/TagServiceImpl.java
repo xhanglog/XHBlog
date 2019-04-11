@@ -4,6 +4,8 @@ import cn.xhanglog.dao.TagMapper;
 import cn.xhanglog.entity.Tag;
 import cn.xhanglog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,16 +57,19 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @CacheEvict(value = "tag",allEntries=true)
     public Integer delTagById(Integer tagId) {
         return tagMapper.delTagById(tagId);
     }
 
     @Override
+    @CachePut(value = "tag")
     public Integer editTagById(Tag tag) {
         return tagMapper.editTagById(tag);
     }
 
     @Override
+    @CacheEvict(value = "tag",allEntries=true)
     public Integer addTag(Tag tag) {
         return tagMapper.addTag(tag);
     }
