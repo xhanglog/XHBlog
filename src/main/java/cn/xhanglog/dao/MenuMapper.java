@@ -26,4 +26,6 @@ public interface MenuMapper {
     Integer addMenu(Menu menu);
 
     Integer editMenu(Menu menu);
+
+    Integer editInText(@Param("menuId") Integer menuId, @Param("value") Integer value, @Param("field") String field);
 }

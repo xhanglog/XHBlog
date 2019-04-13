@@ -30,4 +30,6 @@ public interface TagMapper {
     Integer editTagById(Tag tag);
 
     Integer addTag(Tag tag);
+
+    void addTagList(@Param("list") List<Tag> list);
 }

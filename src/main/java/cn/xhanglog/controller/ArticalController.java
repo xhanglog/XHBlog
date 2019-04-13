@@ -12,17 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 文章Controller层
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/artical")
 public class ArticalController {
 
     @Autowired
@@ -43,7 +39,7 @@ public class ArticalController {
      * @param model
      * @return
      */
-    @RequestMapping("/info/{id}")
+    @RequestMapping("/artical/info/{id}")
     public String getArticalInfoById(@PathVariable("id") Integer id, Model model) {
         Artical artical = articalService.getArticalInfoById(id);
         SysUser user = sysUserService.getUserByid(artical.getUser().getSysUserId());
@@ -57,7 +53,7 @@ public class ArticalController {
         model.addAttribute("preArtical", preArtical);
         model.addAttribute("afterArtical", afterArtical);
         model.addAttribute("artical", artical);
-        return "foreground/info";
+        return "views/foreground/info";
     }
 
     /**
@@ -67,14 +63,14 @@ public class ArticalController {
      * @param model
      * @return
      */
-    @RequestMapping("/tag/{tagName}")
+    @RequestMapping("/artical/tag/{tagName}")
     public String getArticalListByTagName(@PathVariable("tagName") String tagName, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "7") Integer rows, Model model) {
         Tag tag = tagService.getTagByName(tagName);
         Page<Artical> articalList = articalService.getArticalListByTagId(tag.getTagId(), page, rows);
         model.addAttribute("navState", 1);
         model.addAttribute("tag", tag);
         model.addAttribute("page", articalList);
-        return "foreground/list";
+        return "views/foreground/list";
     }
 
     /**
@@ -85,7 +81,7 @@ public class ArticalController {
      * @param model
      * @return
      */
-    @RequestMapping("/menu/{menuName}")
+    @RequestMapping("/artical/menu/{menuName}")
     public String getArticalListByMenuId(@PathVariable("menuName") String menuName, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "7") Integer rows, Model model) {
         Menu menu = menuService.getMenuByName(menuName);
         Page<Artical> articalList = articalService.getArticalListByMenuId(menu.getMenuId(), page, rows);
@@ -93,9 +89,9 @@ public class ArticalController {
         model.addAttribute("page", articalList);
         model.addAttribute("menu", menu);
         if (menu.getLookView() == 1) {
-            return "foreground/list";
+            return "views/foreground/list";
         } else {
-            return "foreground/share";
+            return "views/foreground/share";
         }
     }
 
@@ -107,13 +103,13 @@ public class ArticalController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/search")
+    @RequestMapping(value = "/artical/search")
     public String getArticalsBySearch(String keyword, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "7") Integer rows, Model model) {
         Page<Artical> articalList = articalService.getArticalsBySearch(keyword, page, rows);
         model.addAttribute("keyword", keyword);
         model.addAttribute("navState", 3);
         model.addAttribute("page", articalList);
-        return "foreground/list";
+        return "views/foreground/list";
     }
 
     /**
@@ -122,9 +118,9 @@ public class ArticalController {
      * @param request
      * @return
      */
-    @RequestMapping("/add")
+    @RequestMapping("/admin/artical/add")
     @ResponseBody
-    public Map<String,Object> addArtical(@RequestBody  Artical artical, HttpServletRequest request){
+    public Map<String,Object> addArtical(@RequestBody Artical artical, HttpServletRequest request){
         Map<String,Object> res = new HashMap<>();
         SysUser user = (SysUser) request.getSession().getAttribute("user");
         Integer status = 0;//添加文章的状态
@@ -134,6 +130,29 @@ public class ArticalController {
             String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
             Timestamp dt = Timestamp.valueOf(nowTime);//把时间转换
             artical.setUpdateTime(dt);
+            //获取到关键字，将数据库没有的关键字存到数据库中
+            List<Tag> tagList = tagService.getTagList();
+            String keywords = artical.getKeywords();
+            String[] tags = keywords.split(",");
+            List<Tag> addTag = new ArrayList<>();
+
+            for(String tagName : tags){
+                Integer state = 0;
+                for (Tag tag : tagList ){
+                    if (tag.getTagName().equals(tagName)){
+                        state = 1;
+                        break;
+                    }
+                }
+                if (state == 0) {
+                    Tag ta = new Tag();
+                    ta.setTagCreateTime(dt);
+                    ta.setTagUpdateTime(dt);
+                    ta.setTagName(tagName);
+                    addTag.add(ta);
+                }
+            }
+            tagService.addTagList(addTag);
             if(artical.getArticalId() == null){
                 artical.setCreateTime(dt);
                 artical.setUpdateTime(dt);
@@ -174,7 +193,7 @@ public class ArticalController {
         return res;
     }
 
-    @RequestMapping("/getArticals")
+    @RequestMapping("/admin/artical/getArticals")
     @ResponseBody
     public Page<Artical> getArticals(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer size,String dateTodate, String title){
         Page<Artical> rs = new Page<>();
@@ -204,7 +223,7 @@ public class ArticalController {
         return rs;
     }
 
-    @RequestMapping("/getArticalInfo")
+    @RequestMapping("/admin/artical/getArticalInfo")
     public String getArticalInfo(Model model,HttpServletRequest request){
         String id = request.getParameter("id");
         Artical artical = articalService.getArticalById(Integer.parseInt(id));
@@ -212,10 +231,10 @@ public class ArticalController {
         String s = info.replaceAll("\r|\n", "");
         artical.setEditorValue(s);
         model.addAttribute("artical",artical);
-        return "background/writeBlog";
+        return "views/background/writeBlog";
     }
 
-    @RequestMapping("/delArticalById")
+    @RequestMapping("/admin/artical/delArticalById")
     @ResponseBody
     public Map<String,Integer> delArticalById(Integer articalId){
         Map<String,Integer> res = new HashMap<>();
@@ -228,7 +247,7 @@ public class ArticalController {
         return res;
     }
 
-    @RequestMapping("/editSwitch")
+    @RequestMapping("/admin/artical/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer articalId,Boolean val,String name){
         Map<String,Integer> res = new HashMap<>();

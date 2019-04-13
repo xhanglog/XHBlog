@@ -23,7 +23,7 @@ import java.util.Map;
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/link")
+@RequestMapping("/admin/link")
 public class LinkController {
 
     @Autowired
@@ -61,7 +61,7 @@ public class LinkController {
     public String getLinkInfo(Integer linkId, Model model){
         Link link = linkService.getLinkInfo(linkId);
         model.addAttribute("link",link);
-        return "background/link_add_edit";
+        return "views/background/link_add_edit";
     }
 
     @RequestMapping("/addOrEdit")

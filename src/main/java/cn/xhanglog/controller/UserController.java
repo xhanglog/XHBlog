@@ -3,6 +3,7 @@ package cn.xhanglog.controller;
 import cn.xhanglog.entity.Member;
 import cn.xhanglog.entity.SysUser;
 import cn.xhanglog.service.UserService;
+import cn.xhanglog.util.MD5Util;
 import cn.xhanglog.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,13 +27,12 @@ import java.util.List;
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/user/")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping("login")
+    @RequestMapping("/user/login")
     @ResponseBody
     public Map<String,Object> login(@RequestBody SysUser user, HttpServletRequest request){
         Map<String, Object> res = new HashMap<>();
@@ -46,7 +46,7 @@ public class UserController {
         return res;
     }
 
-    @RequestMapping("editSwitch")
+    @RequestMapping("/admin/user/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer sysUserId,Boolean val){
         Map<String,Integer> res = new HashMap<>();
@@ -59,7 +59,7 @@ public class UserController {
         return res;
     }
 
-    @RequestMapping("getSysUsers")
+    @RequestMapping("/admin/user/getSysUsers")
     @ResponseBody
     public Page<Member> getSysUsers(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size){
         Page<Member> rs = new Page<>();
@@ -71,7 +71,7 @@ public class UserController {
         return rs;
     }
 
-    @RequestMapping("delSysUserById")
+    @RequestMapping("/admin/user/delSysUserById")
     @ResponseBody
     public Map<String,Integer> delSysUserById(Integer sysUserId){
         Map<String,Integer> res = new HashMap<>();
@@ -84,11 +84,14 @@ public class UserController {
         return res;
     }
 
-    @RequestMapping("addSysUser")
+    @RequestMapping("/admin/user/addSysUser")
     @ResponseBody
     public Map<String,Integer> addSysUser(@RequestBody SysUser user){
         Map<String,Integer> res = new HashMap<>();
         user.setStatus(true);
+        //使用姓名+密码作为盐值
+        String s = MD5Util.md5(user.getSysUserPassword(), user.getSysUserName() + user.getSysUserPassword());
+        user.setSysUserPassword(s);
         Integer result = userService.addSysUser(user);
         if (result == 1){
             res.put("code",200);
@@ -98,7 +101,7 @@ public class UserController {
         return res;
     }
 
-    @RequestMapping("validcode")
+    @RequestMapping("/validcode")
     public void validcode(HttpServletRequest request, HttpServletResponse response){
         //创建一张图片
         //单位:像素
@@ -143,5 +146,31 @@ public class UserController {
         //把验证码放入到session中
         HttpSession session = request.getSession();
         session.setAttribute("validcode", ""+randList.get(0)+randList.get(1)+randList.get(2)+randList.get(3));
+    }
+
+    @RequestMapping("/admin/user/editPsd")
+    @ResponseBody
+    public Map<String,Integer> editPsd(@RequestBody SysUser user,HttpServletRequest request){
+        Map<String,Integer> res = new HashMap<>();
+        String s = MD5Util.md5(user.getSysUserPassword(), user.getSysUserName() + user.getSysUserPassword());
+        user.setSysUserPassword(s);
+        Integer result = userService.editPsd(user);
+        if (result == 1){
+            SysUser user1 = (SysUser)request.getSession().getAttribute("user");
+            user1.setSysUserPassword(user.getSysUserPassword());
+            request.getSession().setAttribute("user",user1);
+            request.getSession().setAttribute("pass",user.getSysUserPassword());
+            res.put("code",200);
+        }else {
+            res.put("code",202);
+        }
+        return res;
+    }
+
+    @RequestMapping("/admin/user/loginOut")
+    public String loginOut(HttpServletRequest request){
+        //清除session中的user信息
+        request.getSession().invalidate();
+        return "redirect:http://localhost/login.html";
     }
 }

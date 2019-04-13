@@ -21,19 +21,18 @@ import java.util.Map;
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/menu/")
 public class MenuController {
     @Autowired
     private MenuService menuService;
 
-    @RequestMapping("getAllMenu")
+    @RequestMapping("/menu/getAllMenu")
     @ResponseBody
     public List<Menu> getAllMenu(){
         Integer st = 0;//用于判断是否查询所有的菜单
         return menuService.getAllMenu(st);
     }
 
-    @RequestMapping("getMenus")
+    @RequestMapping("/admin/menu/getMenus")
     @ResponseBody
     public Map<String,Object> getMenus(){
         Map<String,Object> res = new HashMap<>();
@@ -46,7 +45,7 @@ public class MenuController {
         return res;
     }
 
-    @RequestMapping("editSwitch")
+    @RequestMapping("/admin/menu/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer menuId, Boolean val){
         Map<String,Integer> res = new HashMap<>();
@@ -59,7 +58,7 @@ public class MenuController {
         return res;
     }
 
-    @RequestMapping("delMenuById")
+    @RequestMapping("/admin/menu/delMenuById")
     @ResponseBody
     public Map<String,Integer> delMenuById(Integer menuId){
         Map<String,Integer> res = new HashMap<>();
@@ -72,14 +71,14 @@ public class MenuController {
         return res;
     }
 
-    @RequestMapping("getMenuInfo")
+    @RequestMapping("/admin/menu/getMenuInfo")
     public String getLinkInfo(Integer menuId, Model model){
         Menu menu = menuService.getMenuInfo(menuId);
         model.addAttribute("menu",menu);
-        return "background/menu_add_edit";
+        return "views/background/menu_add_edit";
     }
 
-    @RequestMapping("/addOrEdit")
+    @RequestMapping("/admin/menu/addOrEdit")
     @ResponseBody
     public Map<String,Object> addOrEdit(@RequestBody Menu menu, HttpServletRequest request){
         Map<String,Object> res = new HashMap<>();
@@ -106,6 +105,25 @@ public class MenuController {
         } else{
             res.put("msg","操作失败!");
             res.put("code",1);
+        }
+        return res;
+    }
+
+    @RequestMapping("/admin/menu/editInText")
+    @ResponseBody
+    public Map<String,Integer> editInText(Integer menuId,Integer value,String field){
+        Map<String,Integer> res = new HashMap<>();
+        Integer result = 0;
+        if("menuSort".equals(field)){
+            field = "menu_sort";
+        }else {
+            field = "look_view";
+        }
+        result = menuService.editInText(menuId,value,field);
+        if(result == 1 ){
+            res.put("code",200);
+        }else {
+            res.put("code",202);
         }
         return res;
     }

@@ -39,4 +39,6 @@ public interface TagService {
     Integer editTagById(Tag tag);
 
     Integer addTag(Tag tag);
+
+    void addTagList(List<Tag> addTag);
 }

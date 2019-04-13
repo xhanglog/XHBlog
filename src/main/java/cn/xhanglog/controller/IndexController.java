@@ -31,17 +31,13 @@ public class IndexController {
     @Autowired
     private TagService tagService;
 
-    @RequestMapping(value = {"/","/index.html"})
+    @RequestMapping(value = {"/","","/index.html"})
     public String showIndex(Model model){
         List<Artical>  articalList= articalService.getShowIndexArtical();
         model.addAttribute("articalList",articalList);
-        return "foreground/index";
+        return "views/foreground/index";
     }
 
-    @RequestMapping("/about.html")
-    public String showAbout(){
-        return "foreground/about";
-    }
 
     /**
      * 后台首页初始化数据

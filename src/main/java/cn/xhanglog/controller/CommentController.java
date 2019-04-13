@@ -21,7 +21,6 @@ import java.util.Map;
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/comment/")
 public class CommentController {
 
     @Autowired
@@ -29,7 +28,7 @@ public class CommentController {
     @Autowired
     private ArticalService articalService;
 
-    @RequestMapping("add")
+    @RequestMapping("/comment/add")
     public void addCooment(HttpServletRequest request){
         Comment comment = new Comment();
         String content = request.getParameter("content");
@@ -63,7 +62,7 @@ public class CommentController {
         commentService.addComment(comment);
     }
 
-    @RequestMapping("getComments")
+    @RequestMapping("/admin/comment/getComments")
     @ResponseBody
     public Page<Comment> getComments(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String dateTodate, String title){
         Page<Comment> rs = new Page<>();
@@ -93,7 +92,7 @@ public class CommentController {
         return rs;
     }
 
-    @RequestMapping("editSwitch")
+    @RequestMapping("/admin/comment/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer commentId, Boolean val){
         Map<String,Integer> res = new HashMap<>();
@@ -106,7 +105,7 @@ public class CommentController {
         return res;
     }
 
-    @RequestMapping("delCommentById")
+    @RequestMapping("/admin/comment/delCommentById")
     @ResponseBody
     public Map<String,Integer> delCommentById(Integer commentId){
         Map<String,Integer> res = new HashMap<>();

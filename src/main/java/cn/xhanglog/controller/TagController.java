@@ -23,6 +23,7 @@ import java.util.Map;
  * @Author: Xhang
  */
 @Controller
+@RequestMapping("/admin/tag")
 public class TagController {
     @Autowired
     private TagService tagService;
@@ -31,7 +32,7 @@ public class TagController {
     public String getAllTag(Model model){
         List<Tag> tagList = tagService.getTagList();
         model.addAttribute("tags",tagList);
-        return "background/tags";
+        return "views/background/tags";
     }
 
     @RequestMapping("/getTags")
@@ -64,14 +65,15 @@ public class TagController {
         return rs;
     }
 
-    @RequestMapping("/tag/getTagInfo")
+    @RequestMapping("/getTagInfo")
     public String getTagInfo(Integer tagId,Model model){
         Tag tag = tagService.getTagById(tagId);
         model.addAttribute("tag",tag);
-        return "background/tag_add_edit";
+        return "views/background/tag_add_edit";
     }
 
-    @RequestMapping("/tag/delTagById")
+    @RequestMapping("/delTagById")
+    @ResponseBody
     public Map<String,Integer> delTagById(Integer tagId){
         Map<String,Integer> res = new HashMap<>();
         Integer result = tagService.delTagById(tagId);
@@ -83,7 +85,7 @@ public class TagController {
         return res;
     }
 
-    @RequestMapping("/tag/addOrEdittag")
+    @RequestMapping("/addOrEdittag")
     @ResponseBody
     public Map<String,Integer> addOrEdittag(@RequestBody Tag tag){
         Map<String,Integer> res = new HashMap<>();

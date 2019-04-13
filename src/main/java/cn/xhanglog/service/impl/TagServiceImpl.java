@@ -5,7 +5,6 @@ import cn.xhanglog.entity.Tag;
 import cn.xhanglog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +62,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @CachePut(value = "tag")
+    @CacheEvict(value = "tag",allEntries=true)
     public Integer editTagById(Tag tag) {
         return tagMapper.editTagById(tag);
     }
@@ -72,5 +71,10 @@ public class TagServiceImpl implements TagService {
     @CacheEvict(value = "tag",allEntries=true)
     public Integer addTag(Tag tag) {
         return tagMapper.addTag(tag);
+    }
+
+    @Override
+    public void addTagList(List<Tag> addTag) {
+        tagMapper.addTagList(addTag);
     }
 }

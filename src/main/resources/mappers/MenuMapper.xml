@@ -56,4 +56,8 @@
         look_view = #{lookView},menu_description = #{menuDescription},menu_update_time = #{menuUpdateTime}
         where menu_id = #{menuId};
     </update>
+
+    <update id="editInText">
+        update menu set ${field} = ${value} where menu_id = ${menuId};
+    </update>
 </mapper>

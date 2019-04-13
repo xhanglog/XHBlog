@@ -42,4 +42,8 @@
           sys_user_name = #{sysUserName},sys_user_password = #{sysUserPassword},sys_user_qq = #{sysUserQq},
           sys_user_email = #{sysUserEmail},sys_user_description = #{sysUserDescription},status = #{status}
     </insert>
+
+    <update id="editPsd" parameterType="SysUser">
+        update sys_user set sys_user_password = #{sysUserPassword} where sys_user_id = #{sysUserId};
+    </update>
 </mapper>

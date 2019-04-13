@@ -120,7 +120,7 @@ public class MemberController {
 
     }
 
-    @RequestMapping("/member/getMembers")
+    @RequestMapping("/admin/member/getMembers")
     @ResponseBody
     public Page<Member> getArticals(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String dateTodate, String title){
         Page<Member> rs = new Page<>();
@@ -150,7 +150,7 @@ public class MemberController {
         return rs;
     }
 
-    @RequestMapping("/member/editSwitch")
+    @RequestMapping("/admin/member/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(String memberId,Boolean val){
         Map<String,Integer> res = new HashMap<>();
@@ -163,7 +163,7 @@ public class MemberController {
         return res;
     }
 
-    @RequestMapping("/member/delMemberById")
+    @RequestMapping("/admin/member/delMemberById")
     @ResponseBody
     public Map<String,Integer> delMemberById(String memberId){
         Map<String,Integer> res = new HashMap<>();

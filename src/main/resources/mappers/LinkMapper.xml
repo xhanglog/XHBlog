@@ -16,7 +16,7 @@
     </resultMap>
 
     <select id="getShowIndexLinkList" resultMap="BaseResultMap" parameterType="cn.xhanglog.entity.Link" >
-        select * from link where showIndex = 1;
+        select * from link where showIndex = 1 and link_status = 1;
     </select>
 
     <select id="getLinkCount" resultType="integer">

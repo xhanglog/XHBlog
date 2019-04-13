@@ -22,4 +22,6 @@ public interface UserService {
     Integer delSysUserById(Integer sysUserId);
 
     Integer addSysUser(SysUser user);
+
+    Integer editPsd(SysUser user);
 }

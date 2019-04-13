@@ -68,4 +68,13 @@
           tag_name = #{tagName},tag_description = #{tagDescription},tag_create_time = #{tagCreateTime},
           tag_update_time = #{tagUpdateTime}
     </insert>
+
+    <insert id="addTagList" parameterType="list">
+        insert into tag (tag_name,tag_create_time,tag_update_time) values 
+        <foreach collection="list" item="tag" index="index" separator=",">
+            (#{tag.tagName,jdbcType=BIGINT},
+            #{tag.tagCreateTime,jdbcType=TIMESTAMP},
+            #{tag.tagUpdateTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
 </mapper>

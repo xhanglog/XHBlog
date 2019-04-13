@@ -23,4 +23,6 @@ public interface MenuService {
     Integer addMenu(Menu menu);
 
     Integer editMenu(Menu menu);
+
+    Integer editInText(Integer menuId, Integer value, String field);
 }

@@ -4,6 +4,7 @@ import cn.xhanglog.dao.SysUserMapper;
 import cn.xhanglog.entity.Member;
 import cn.xhanglog.entity.SysUser;
 import cn.xhanglog.service.UserService;
+import cn.xhanglog.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,10 @@ public class UserServiceImpl implements UserService {
         List<SysUser> sysUsers = sysUserMapper.getUserByName(user.getSysUserName());
         if(sysUsers.size() != 0){
             for (SysUser sysUser : sysUsers){
-                if(sysUser.getSysUserPassword().equals(user.getSysUserPassword())){
+                String s = MD5Util.md5(user.getSysUserPassword(), user.getSysUserName() + user.getSysUserPassword());
+                if(sysUser.getSysUserPassword().equals(s)){
                     /*将用户放入session域中*/
+                    request.getSession().setAttribute("pass",user.getSysUserPassword());
                     request.getSession().setAttribute("user",sysUser);
                     res.put("code",0);
                 }else{
@@ -68,5 +71,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer addSysUser(SysUser user) {
         return sysUserMapper.addSysUser(user);
+    }
+
+    @Override
+    public Integer editPsd(SysUser user) {
+        return sysUserMapper.editPsd(user);
     }
 }
