@@ -171,6 +171,6 @@ public class UserController {
     public String loginOut(HttpServletRequest request){
         //清除session中的user信息
         request.getSession().invalidate();
-        return "redirect:http://localhost/login.html";
+        return "redirect:http://www.xhanglog.cn/login.html";
     }
 }
