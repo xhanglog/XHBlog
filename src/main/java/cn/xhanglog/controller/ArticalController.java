@@ -152,7 +152,9 @@ public class ArticalController {
                     addTag.add(ta);
                 }
             }
-            tagService.addTagList(addTag);
+            if(addTag.size() !=0){
+                tagService.addTagList(addTag);
+            }
             if(artical.getArticalId() == null){
                 artical.setCreateTime(dt);
                 artical.setUpdateTime(dt);
