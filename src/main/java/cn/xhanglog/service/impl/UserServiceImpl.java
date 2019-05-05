@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
             }
         }else {
             res.put("code",1);
-            res.put("msg","用户名输入错误!");
+            res.put("msg","用户不存在!");
         }
         return res;
     }

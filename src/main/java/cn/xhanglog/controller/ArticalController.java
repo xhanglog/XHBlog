@@ -130,12 +130,17 @@ public class ArticalController {
             String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
             Timestamp dt = Timestamp.valueOf(nowTime);//把时间转换
             artical.setUpdateTime(dt);
-            //获取到关键字，将数据库没有的关键字存到数据库中
+            //当没有封面图片时，默认为null
+            if(artical.getCoverImage().equals("")){
+                artical.setCoverImage(null);
+            }
+
             List<Tag> tagList = tagService.getTagList();
             String keywords = artical.getKeywords();
             String[] tags = keywords.split(",");
             List<Tag> addTag = new ArrayList<>();
 
+            //获取到关键字，将数据库没有的关键字存到数据库中
             for(String tagName : tags){
                 Integer state = 0;
                 for (Tag tag : tagList ){
@@ -149,18 +154,29 @@ public class ArticalController {
                     ta.setTagCreateTime(dt);
                     ta.setTagUpdateTime(dt);
                     ta.setTagName(tagName);
+                    //没有的放入集合
                     addTag.add(ta);
                 }
             }
+            //批量添加
             if(addTag.size() !=0){
                 tagService.addTagList(addTag);
             }
+
+            //添加文章标签对应信息
+            List<Tag> tags1 = new ArrayList<>();
+            for(String tagName : tags){
+                Tag tag = tagService.getTagByName(tagName);
+                tags1.add(tag);
+            }
+
+            //文章id不等于NULL表示是修改文章
             if(artical.getArticalId() == null){
                 artical.setCreateTime(dt);
                 artical.setUpdateTime(dt);
                 artical.setLookCount(0);
                 artical.setCommentCount(0);
-                status = articalService.addArtical(artical);
+                status = articalService.addArtical(artical,tags1);
             }else {
                 try {
                     String creTime = artical.getCondition();

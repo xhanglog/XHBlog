@@ -98,7 +98,7 @@
        select sum(lookCount) from artical;
     </select>
 
-    <insert id="addArtical" parameterType="cn.xhanglog.entity.Artical">
+    <insert id="addArtical" parameterType="cn.xhanglog.entity.Artical" useGeneratedKeys="true" keyProperty="articalId">
         insert  into artical set
         menu_id = #{menuId},sys_user_id = #{user.sysUserId},summary = #{summary},content = #{editorValue},
         title = #{title},cover_image = #{coverImage},status = #{status},keywords = #{keywords},is_comment = #{comment},
@@ -149,4 +149,12 @@
           ${name} = ${val}
         where artical_id = ${articalId}
     </update>
+
+    <insert id="addTagArtical">
+        insert into artical_tag (artical_id,tag_id) values
+        <foreach collection="tags" item="tag" index="index" separator=",">
+            (#{articalId,jdbcType=INTEGER},
+            #{tag.tagId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
 </mapper>

@@ -28,4 +28,6 @@ public interface LinkMapper {
     Integer editLink(Link link);
 
     Integer delLinkById(Integer linkId);
+
+    List<Link> getPreLinks();
 }

@@ -49,6 +49,11 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
+    public List<Link> getPreLinks() {
+        return linkMapper.getPreLinks();
+    }
+
+    @Override
     @CacheEvict(value = "link",allEntries=true)
     public Integer editSwitch(Integer linkId, Boolean val, String name) {
         return linkMapper.editSwitch(linkId,val,name);

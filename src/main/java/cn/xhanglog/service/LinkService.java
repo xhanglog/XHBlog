@@ -33,4 +33,6 @@ public interface LinkService {
     Integer getLinkCountByCriteria(String title);
 
     Integer delLinkById(Integer linkId);
+
+    List<Link> getPreLinks();
 }

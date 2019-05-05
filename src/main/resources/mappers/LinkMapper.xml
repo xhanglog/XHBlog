@@ -71,4 +71,8 @@
     <delete id="delLinkById" parameterType="integer">
         delete from link where link_id = #{linkId};
     </delete>
+
+    <select id="getPreLinks" resultMap="BaseResultMap">
+        select * from link where link_status = 1;
+    </select>
 </mapper>

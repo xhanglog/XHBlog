@@ -1,6 +1,7 @@
 package cn.xhanglog.service;
 
 import cn.xhanglog.entity.Artical;
+import cn.xhanglog.entity.Tag;
 import cn.xhanglog.util.Page;
 
 import java.util.Date;
@@ -118,7 +119,7 @@ public interface ArticalService {
      * @param artical
      * @return
      */
-    Integer addArtical(Artical artical);
+    Integer addArtical(Artical artical,List<Tag> tags);
 
     List<Artical> getArticals(Integer page, Integer size, Date start, Date end, String title);
 

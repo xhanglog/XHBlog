@@ -23,13 +23,19 @@ import java.util.Map;
  * @Author: Xhang
  */
 @Controller
-@RequestMapping("/admin/link")
 public class LinkController {
 
     @Autowired
     private LinkService linkService;
 
-    @RequestMapping("/getLinks")
+    @RequestMapping("/link/getLinks")
+    public String getPreLinks(Model model){
+        List<Link> links = linkService.getPreLinks();
+        model.addAttribute("links",links);
+        return "views/foreground/link";
+    }
+
+    @RequestMapping("/admin/link/getLinks")
     @ResponseBody
     public Page<Link> getLinks(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String title){
         Page<Link> rs = new Page<>();
@@ -41,7 +47,7 @@ public class LinkController {
         return rs;
     }
 
-    @RequestMapping("/editSwitch")
+    @RequestMapping("/admin/link/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer linkId, Boolean val, String name){
         Map<String,Integer> res = new HashMap<>();
@@ -57,14 +63,14 @@ public class LinkController {
         return res;
     }
 
-    @RequestMapping("/getLinkInfo")
+    @RequestMapping("/admin/link/getLinkInfo")
     public String getLinkInfo(Integer linkId, Model model){
         Link link = linkService.getLinkInfo(linkId);
         model.addAttribute("link",link);
         return "views/background/link_add_edit";
     }
 
-    @RequestMapping("/addOrEdit")
+    @RequestMapping("/admin/link/addOrEdit")
     @ResponseBody
     public Map<String,Object> addOrEdit(@RequestBody Link link, HttpServletRequest request){
         Map<String,Object> res = new HashMap<>();
@@ -95,7 +101,41 @@ public class LinkController {
         return res;
     }
 
-    @RequestMapping("/delLinkById")
+    @RequestMapping("/link/add")
+    @ResponseBody
+    public Map<String,Integer> add(HttpServletRequest request){
+        Link link = new Link();
+        Map<String,Integer> res = new HashMap<>();
+        Integer result = 0;
+        Date date = new Date();
+        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        Timestamp dt = Timestamp.valueOf(nowTime);//把时间转换
+
+        String linkName = request.getParameter("linkName");
+        String linkUrl = request.getParameter("linkUrl");
+        String linkOwnerNickname = request.getParameter("linkOwnerNickname");
+        String linkOwnerContact = request.getParameter("linkOwnerContact");
+        String linkDescription = request.getParameter("linkDescription");
+
+        link.setLinkName(linkName);
+        link.setLinkUrl(linkUrl);
+        link.setLinkOwnerNickname(linkOwnerNickname);
+        link.setLinkOwnerContact(linkOwnerContact);
+        link.setLinkDescription(linkDescription);
+        link.setLinkUpdateTime(dt);
+        link.setLinkCreateTime(dt);
+        link.setShowIndex(false);
+        link.setLinkStatus(true);
+        result = linkService.addLink(link);
+        if(result == 1 ){
+            res.put("code",202);
+        } else{
+            res.put("code",204);
+        }
+        return res;
+    }
+
+    @RequestMapping("/admin/link/delLinkById")
     @ResponseBody
     public Map<String,Integer> delLinkById(Integer linkId){
         Map<String,Integer> res = new HashMap<>();

@@ -2,6 +2,7 @@ package cn.xhanglog.service.impl;
 
 import cn.xhanglog.dao.ArticalMapper;
 import cn.xhanglog.entity.Artical;
+import cn.xhanglog.entity.Tag;
 import cn.xhanglog.service.ArticalService;
 import cn.xhanglog.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,8 +135,12 @@ public class ArticalServiceImpl implements ArticalService {
     }
 
     @Override
-    public Integer addArtical(Artical artical) {
-        return articalMapper.addArtical(artical);
+    public Integer addArtical(Artical artical,List<Tag> tags) {
+        Integer result = articalMapper.addArtical(artical);
+        if(result != 0){
+            articalMapper.addTagArtical(artical.getArticalId(),tags);
+        }
+        return result;
     }
 
     @Override

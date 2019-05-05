@@ -46,4 +46,5 @@
   <welcome-file-list>
     <welcome-file></welcome-file>
   </welcome-file-list>
+  <distributable/>
 </web-app>

@@ -74,6 +74,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @CacheEvict(value = "tag",allEntries=true)
     public void addTagList(List<Tag> addTag) {
         tagMapper.addTagList(addTag);
     }

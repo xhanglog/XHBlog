@@ -1,6 +1,7 @@
 package cn.xhanglog.dao;
 
 import cn.xhanglog.entity.Artical;
+import cn.xhanglog.entity.Tag;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -63,4 +64,6 @@ public interface ArticalMapper {
     Integer delArticalById(Integer id);
 
     Integer editSwitch(@Param("articalId") Integer articalId, @Param("val") Boolean val, @Param("name") String name);
+
+    void addTagArtical(@Param("articalId")Integer articalId, @Param("tags")List<Tag> tags);
 }
