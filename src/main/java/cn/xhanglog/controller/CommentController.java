@@ -28,6 +28,10 @@ public class CommentController {
     @Autowired
     private ArticalService articalService;
 
+    /**
+     * 添加评论信息
+     * @param request
+     */
     @RequestMapping("/comment/add")
     public void addCooment(HttpServletRequest request){
         Comment comment = new Comment();
@@ -48,6 +52,7 @@ public class CommentController {
             comment.setZid(Integer.parseInt(zid));
         }
         if ("".equals(commentPid)){
+            //当评论为一级评论时，设置父id为0
             comment.setCommentPid(0);
         }else {
             comment.setCommentPid(Integer.parseInt(commentPid));
@@ -62,6 +67,14 @@ public class CommentController {
         commentService.addComment(comment);
     }
 
+    /**
+     * 根据日期范围，关键字条件分页查询评论列表
+     * @param page
+     * @param size
+     * @param dateTodate
+     * @param title
+     * @return
+     */
     @RequestMapping("/admin/comment/getComments")
     @ResponseBody
     public Page<Comment> getComments(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String dateTodate, String title){
@@ -71,6 +84,7 @@ public class CommentController {
         String en = "";
         Date start = null;
         Date end = null;
+        //日期范围不等于空时，根据分隔符分割出日期
         if(!dateTodate.equals("")){
             String[] sourceStrArray = dateTodate.split("to");
             st =  sourceStrArray[0];
@@ -92,6 +106,12 @@ public class CommentController {
         return rs;
     }
 
+    /**
+     * 状态修改开关
+     * @param commentId
+     * @param val
+     * @return
+     */
     @RequestMapping("/admin/comment/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer commentId, Boolean val){
@@ -105,6 +125,11 @@ public class CommentController {
         return res;
     }
 
+    /**
+     * 根据ID删除
+     * @param commentId
+     * @return
+     */
     @RequestMapping("/admin/comment/delCommentById")
     @ResponseBody
     public Map<String,Integer> delCommentById(Integer commentId){

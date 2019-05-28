@@ -28,6 +28,11 @@ public class LinkController {
     @Autowired
     private LinkService linkService;
 
+    /**
+     * 获取所有友链
+     * @param model
+     * @return
+     */
     @RequestMapping("/link/getLinks")
     public String getPreLinks(Model model){
         List<Link> links = linkService.getPreLinks();
@@ -35,6 +40,13 @@ public class LinkController {
         return "views/foreground/link";
     }
 
+    /**
+     * 后台获取所有友链
+     * @param page
+     * @param size
+     * @param title
+     * @return
+     */
     @RequestMapping("/admin/link/getLinks")
     @ResponseBody
     public Page<Link> getLinks(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String title){
@@ -47,6 +59,13 @@ public class LinkController {
         return rs;
     }
 
+    /**
+     * 后台友链状态修改开关
+     * @param linkId
+     * @param val
+     * @param name
+     * @return
+     */
     @RequestMapping("/admin/link/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer linkId, Boolean val, String name){
@@ -63,6 +82,12 @@ public class LinkController {
         return res;
     }
 
+    /**
+     * 根据ID获取友链详情
+     * @param linkId
+     * @param model
+     * @return
+     */
     @RequestMapping("/admin/link/getLinkInfo")
     public String getLinkInfo(Integer linkId, Model model){
         Link link = linkService.getLinkInfo(linkId);
@@ -70,6 +95,12 @@ public class LinkController {
         return "views/background/link_add_edit";
     }
 
+    /**
+     * 添加或者修改友链，以ID是否为空做判断
+     * @param link
+     * @param request
+     * @return
+     */
     @RequestMapping("/admin/link/addOrEdit")
     @ResponseBody
     public Map<String,Object> addOrEdit(@RequestBody Link link, HttpServletRequest request){
@@ -101,6 +132,11 @@ public class LinkController {
         return res;
     }
 
+    /**
+     * 前台添加...因为拦截器把上面的方法拦截了，所有重新写了一个
+     * @param request
+     * @return
+     */
     @RequestMapping("/link/add")
     @ResponseBody
     public Map<String,Integer> add(HttpServletRequest request){
@@ -135,6 +171,11 @@ public class LinkController {
         return res;
     }
 
+    /**
+     * 根据ID删除友链
+     * @param linkId
+     * @return
+     */
     @RequestMapping("/admin/link/delLinkById")
     @ResponseBody
     public Map<String,Integer> delLinkById(Integer linkId){

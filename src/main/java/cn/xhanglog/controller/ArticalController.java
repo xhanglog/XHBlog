@@ -113,7 +113,7 @@ public class ArticalController {
     }
 
     /**
-     * 添加文章
+     * 添加修改文章
      * @param artical
      * @param request
      * @return
@@ -211,6 +211,14 @@ public class ArticalController {
         return res;
     }
 
+    /**
+     * 后台获取所有文章
+     * @param page
+     * @param size
+     * @param dateTodate
+     * @param title
+     * @return
+     */
     @RequestMapping("/admin/artical/getArticals")
     @ResponseBody
     public Page<Artical> getArticals(@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "10") Integer size,String dateTodate, String title){
@@ -241,6 +249,12 @@ public class ArticalController {
         return rs;
     }
 
+    /**
+     * 后台获取文章详情，用于修改时回显
+     * @param model
+     * @param request
+     * @return
+     */
     @RequestMapping("/admin/artical/getArticalInfo")
     public String getArticalInfo(Model model,HttpServletRequest request){
         String id = request.getParameter("id");
@@ -252,6 +266,11 @@ public class ArticalController {
         return "views/background/writeBlog";
     }
 
+    /**
+     * 根据文章ID文章
+     * @param articalId
+     * @return
+     */
     @RequestMapping("/admin/artical/delArticalById")
     @ResponseBody
     public Map<String,Integer> delArticalById(Integer articalId){
@@ -265,10 +284,18 @@ public class ArticalController {
         return res;
     }
 
+    /**
+     *  文章状态修改开关
+     * @param articalId
+     * @param val
+     * @param name
+     * @return
+     */
     @RequestMapping("/admin/artical/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(Integer articalId,Boolean val,String name){
         Map<String,Integer> res = new HashMap<>();
+        //设置为和数据库字段名称一致
         if(name.equals("comment")){
             name = "is_comment";
         }

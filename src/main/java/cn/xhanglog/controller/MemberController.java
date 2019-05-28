@@ -38,6 +38,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    /**
+     * QQ登录的控制
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping(value = {"/qqLogin"})
     public void qqLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -48,6 +54,15 @@ public class MemberController {
         }
     }
 
+    /**
+     * QQ登录的具体实现以及跳转
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     * @throws QQConnectException
+     */
     @RequestMapping(value = {"/afterQqLogin"})
     public String qqSuccess(HttpServletRequest request,HttpServletResponse response)
             throws IOException, ParseException, QQConnectException {
@@ -120,6 +135,14 @@ public class MemberController {
 
     }
 
+    /**
+     * 后台根据条件获取用户信息
+     * @param page
+     * @param size
+     * @param dateTodate
+     * @param title
+     * @return
+     */
     @RequestMapping("/admin/member/getMembers")
     @ResponseBody
     public Page<Member> getArticals(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size, String dateTodate, String title){
@@ -150,6 +173,12 @@ public class MemberController {
         return rs;
     }
 
+    /**
+     * 状态修改开关
+     * @param memberId
+     * @param val
+     * @return
+     */
     @RequestMapping("/admin/member/editSwitch")
     @ResponseBody
     public Map<String,Integer> editSwitch(String memberId,Boolean val){
@@ -163,6 +192,11 @@ public class MemberController {
         return res;
     }
 
+    /**
+     * 根据ID删除用户
+     * @param memberId
+     * @return
+     */
     @RequestMapping("/admin/member/delMemberById")
     @ResponseBody
     public Map<String,Integer> delMemberById(String memberId){
