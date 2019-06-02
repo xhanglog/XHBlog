@@ -93,6 +93,7 @@
                     <div class="comment-list">
                         <c:forEach items="${commentList}" var="com">
                             <c:if test="${com.commentPid == 0}">
+                                <c:if test="${com.commentStatus == true}">
                                 <div class="comment-info">
                                     <header><img src="${com.memberPic}"></header>
                                     <div class="comment-right">
@@ -109,16 +110,19 @@
                                         <div class="reply-list">
                                             <c:forEach items="${commentList}" var="cc">
                                                 <c:if test="${cc.zid == com.commentId && cc.commentPid != 0}">
-                                                    <div class="reply" >
-                                                        <input type="hidden" value="${cc.commentId}">
-                                                        <div><a href="javascript:void(0)">${cc.memberName}</a>:<a href="javascript:void(0)">@${cc.commentPname}</a><span>${cc.commentContent}</span></div>
-                                                        <p><span><fmt:formatDate value="${cc.commentCreateTime}" pattern="yyyy-MM-dd HH:mm"/></span> <span class="reply-btn" id="a2">回复</span></p>
-                                                    </div>
+                                                    <c:if test="${cc.commentStatus == true}">
+                                                        <div class="reply" >
+                                                            <input type="hidden" value="${cc.commentId}">
+                                                            <div><a href="javascript:void(0)">${cc.memberName}</a>:<a href="javascript:void(0)">@${cc.commentPname}</a><span>${cc.commentContent}</span></div>
+                                                            <p><span><fmt:formatDate value="${cc.commentCreateTime}" pattern="yyyy-MM-dd HH:mm"/></span> <span class="reply-btn" id="a2">回复</span></p>
+                                                        </div>
+                                                    </c:if>
                                                 </c:if>
                                             </c:forEach>
                                         </div>
                                     </div>
                                 </div>
+                                </c:if>
                             </c:if>
                         </c:forEach>
                     </div>
@@ -141,6 +145,7 @@
 <input id="openID" value="${openID}" type="hidden" />
 <input id="avatar" value="${avatar}" type="hidden" />
 <input id="qqname" value="${qqname}" type="hidden" />
+<input id="isComment" value="${comment}"  />
 <input id="articalId" value="${artical.articalId}" type="hidden" />
 <footer>
     <p>Design by <a href="#" target="_blank">贰月小巷</a><span>&nbsp;&nbsp;&nbsp;蜀ICP备18012986号-1	&nbsp;&nbsp;<a href="${pageContext.request.contextPath}/login.html" target="_blank">后台入口</a></span></p>
@@ -155,6 +160,7 @@
     var avatar = document.getElementById("avatar").value;
     var qqname = document.getElementById("qqname").value;
     var articalId = document.getElementById("articalId").value;
+    var isComment = document.getElementById("isComment").value;
     $(function(){
         $("#comment").click(function(){
             if (openID == ""){
@@ -166,22 +172,26 @@
                 obj.replyName= qqname;
                 obj.content=$("#content").val();
                 if(obj.content != ""){
-                    $.ajax({
-                        type: "get",
-                        url: '/comment/add',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data: {openID: openID,content: obj.content,articalId:articalId,
-                            zid: null,commentPid: null,commentPname:null},
-                        success: function () {
-                        },
-                        error: function () {
-                        }
-                    });
-                    $(".comment-list").append("<div class='comment-info'><header><img src='"+obj.img+"'></header><div class='comment-right'><h3>"+obj.replyName+"</h3>"
-                        +"<div class='comment-content-header'><span><i class=\"fa fa-clock-o fa-fw\"></i>"+obj.time+"</span>"+"</div><p class='content'>"+obj.content
-                        +"</p><div class='comment-content-footer'><div class='row'><div class='col-md-10'>"+ "</div><div class='col-md-2'><span class='reply-btn'>回复" +
-                        "</span></div></div></div><div class='reply-list'></div></div></div>");
-                    $("#content").val("");
+                    if(isComment == "false"){
+                        alert("您没有评论权限，请联系管理员。");
+                    }else{
+                        $.ajax({
+                            type: "get",
+                            url: '/comment/add',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data: {openID: openID,content: obj.content,articalId:articalId,
+                                zid: null,commentPid: null,commentPname:null},
+                            success: function () {
+                            },
+                            error: function () {
+                            }
+                        });
+                        $(".comment-list").append("<div class='comment-info'><header><img src='"+obj.img+"'></header><div class='comment-right'><h3>"+obj.replyName+"</h3>"
+                            +"<div class='comment-content-header'><span><i class=\"fa fa-clock-o fa-fw\"></i>"+obj.time+"</span>"+"</div><p class='content'>"+obj.content
+                            +"</p><div class='comment-content-footer'><div class='row'><div class='col-md-10'>"+ "</div><div class='col-md-2'><span class='reply-btn'>回复" +
+                            "</span></div></div></div><div class='reply-list'></div></div></div>");
+                        $("#content").val("");
+                    }
                 }else{
                     alert("还没有输入东西！");
                 }

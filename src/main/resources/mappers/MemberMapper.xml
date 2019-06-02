@@ -15,7 +15,7 @@
     </select>
 
     <select id="getMemberById" resultMap="BaseResultMap">
-        select member_id,member_nickname,member_image from member where member_id = #{openID};
+        select member_id,member_nickname,member_image,is_comment from member where member_id = #{openID};
     </select>
 
     <insert id="addMember">

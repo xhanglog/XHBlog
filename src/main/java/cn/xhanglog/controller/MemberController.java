@@ -123,9 +123,13 @@ public class MemberController {
             Timestamp dt = Timestamp.valueOf(nowTime);//把时间转换
             member.setCreateTime(dt);
             member.setComment(true);
+            //根据oppenID获取会员信息
             Member mem = memberService.getMemberById(openID);
-            if(mem == null){
+            if(mem != null){
+                request.getSession().setAttribute("comment", mem.getComment());
+            }else {
                 memberService.addMember(member);
+                request.getSession().setAttribute("comment", true);
             }
         }
         request.getSession().setAttribute("openID",openID);
@@ -181,9 +185,10 @@ public class MemberController {
      */
     @RequestMapping("/admin/member/editSwitch")
     @ResponseBody
-    public Map<String,Integer> editSwitch(String memberId,Boolean val){
+    public Map<String,Integer> editSwitch(String memberId,Boolean val,HttpServletRequest request){
         Map<String,Integer> res = new HashMap<>();
         Integer result = memberService.editSwitch(memberId,val);
+        request.getSession().setAttribute("comment", val);
         if (result == 1){
             res.put("code",200);
         }else {
